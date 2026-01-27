@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Identity;
+<ul class="nav navbar-nav navbar-right">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Cuenta" asp-action="Logout">Logout</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Cuenta" asp-action="Login">Login</a>
+        </li>
+    }
+    </ul>
