@@ -1,8 +1,75 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Panel de Administración";
+    Layout = null; // Para que no use el _Layout
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Wallet SICAI - Panel</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- CSS propio -->
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="d-flex" style="min-height: 100vh;">
+        <!-- Sidebar -->
+        <nav class="bg-dark text-white p-3" style="width: 250px;">
+            <h4 class="mb-4">Wallet SICAI - </h4>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a class="nav-link text-white" href="#"><i class="fa-solid fa-house me-2"></i>Menú Principal</a></li>
+                <li class="nav-item mb-2"><a class="nav-link text-white" href="#"><i class="fa-solid fa-magnifying-glass me-2"></i>Consulta de Saldo</a></li>
+                <li class="nav-item mb-2"><a class="nav-link text-white" href="#"><i class="fa-solid fa-wallet me-2"></i>Recargar Saldo</a></li>
+                <li class="nav-item mb-2"><a class="nav-link text-white" href="#"><i class="fa-solid fa-clock-rotate-left me-2"></i>Historial Recargas</a></li>
+                <li class="nav-item mb-2"><a class="nav-link text-white" href="#"><i class="fa-solid fa-gear me-2"></i>Settings</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fa-solid fa-right-from-bracket me-2"></i>Log Out</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main panel -->
+        <main class="flex-grow-1 p-4 bg-light">
+            <h2 class="mb-4">Panel de Administración</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm admin-card">
+                        <div class="card-body">
+                            <i class="fa-solid fa-magnifying-glass fa-2x mb-3 text-primary"></i>
+                            <h5 class="card-title">Consulta de Saldo</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm admin-card">
+                        <div class="card-body">
+                            <i class="fa-solid fa-wallet fa-2x mb-3 text-success"></i>
+                            <h5 class="card-title">Recargar Saldo</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm admin-card">
+                        <div class="card-body">
+                            <i class="fa-solid fa-clock-rotate-left fa-2x mb-3 text-warning"></i>
+                            <h5 class="card-title">Historial de Recargas por Estudiante</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center w-100 mt-auto py-3 bg-light">
+        <small>© 2026 Wallet SICAI. All rights reserved.</small>
+    </footer>
+
+</body>
+</html>
