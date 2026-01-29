@@ -142,28 +142,285 @@ select:-webkit-autofill {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-/* ===== Menu principal===== */
+/* ===== REMEMBER ===== */
 
-/* Sidebar */
-nav h4 {
-    font-weight: bold;
+.remember-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.nav-link {
-    transition: background 0.2s ease;
-}
-
-    .nav-link:hover {
-        background-color: rgba(255,255,255,0.1);
-        border-radius: 5px;
+    .remember-check .form-check-input {
+        background-color: #020617;
+        border-color: #475569;
     }
 
-/* Cards del panel */
+        .remember-check .form-check-input:checked {
+            background-color: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+
+    .remember-check .form-check-label {
+        color: #cbd5f5;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+
+
+/* =========================
+   Menu Principal
+========================= */
+
+.admin-body {
+    background-color: #1e1b3a;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+
+/* ===== SIDEBAR ===== */
+
+.admin-sidebar {
+    width: 260px;
+    background-color: #14122b;
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-title {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.admin-sidebar .nav-link {
+    color: #cfcfff;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.3rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+    .admin-sidebar .nav-link i {
+        width: 22px;
+    }
+
+    .admin-sidebar .nav-link:hover,
+    .admin-sidebar .nav-link.active {
+        background-color: #2a275a;
+        color: white;
+    }
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+    .sidebar-bottom .logout {
+        color: #ff9d9d;
+    }
+
+        .sidebar-bottom .logout:hover {
+            background-color: rgba(255, 100, 100, 0.15);
+        }
+
+
+/* ===== MAIN CONTENT ===== */
+
+.admin-main {
+    background-color: #1e1b3a;
+    padding: 2.5rem;
+}
+
+/* ===== CARDS ===== */
+
 .admin-card {
-    transition: transform 0.2s ease;
+    background: linear-gradient(180deg, #3b3780, #2e2966);
+    color: white;
+    border-radius: 20px;
+    border: 1px solid rgba(190, 180, 255, 0.25);
+    padding: 2rem 1.5rem;
+    height: 100%;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+    .admin-card .card-title {
+        font-weight: 600;
+        font-size: 1.15rem;
+        letter-spacing: 0.4px;
+    }
+
+    .admin-card:hover {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 28px 55px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(190, 180, 255, 0.35);
+        background: linear-gradient(180deg, #4a46a3, #36307a);
+        cursor: pointer;
+    }
+
+
+/*.admin-card i {
+        color: #a9a2ff;
+    }*/
+
+/* =========================
+   BUSQUEDA - CONSULTA DE SALDO
+========================= */
+
+/* ==== ESTILOS GENERALES ==== */
+
+.admin-body {
+    background: radial-gradient(circle at top, #1c1f3a, #0b0d17);
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ==== SIDEBAR ==== */
+
+.admin-sidebar {
+    position: relative; 
+    width: 250px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0f1226, #0a0c18);
+    padding: 20px;
+    color: #ffffff;
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Links del sidebar */
+.admin-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #cfd3ff;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+    .admin-sidebar .nav-link i {
+        width: 18px;
+        text-align: center;
+    }
+
+    /* Hover y activo */
+    .admin-sidebar .nav-link:hover,
+    .admin-sidebar .nav-link.active {
+        background-color: rgba(124, 92, 255, 0.2);
+        color: #ffffff;
+    }
+
+.sidebar-bottom {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+}
+
+    .sidebar-bottom .nav-link {
+        margin-bottom: 8px;
+    }
+
+    /* Logout */
+    .sidebar-bottom .logout {
+        color: #ff6b6b;
+    }
+
+        .sidebar-bottom .logout:hover {
+            background-color: rgba(255, 107, 107, 0.15);
+        }
+
+/* ==== CONTENIDO PRINCIPAL ==== */
+
+.admin-main {
+    padding: 40px;
+}
+
+/* ==== TARJETAS (CARDS) ==== */
+
+.admin-card {
+    background: linear-gradient(145deg, #1e2235, #141728);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
 }
 
     .admin-card:hover {
-        transform: scale(1.05);
+        transform: translateY(-6px);
+        box-shadow: 0 25px 55px rgba(0,0,0,0.6);
+    }
+
+    .admin-card .card-body {
+        padding: 30px;
+    }
+
+    .admin-card h5 {
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+/* ==== BÚSQUEDA  ==== */
+
+.search-card {
+    background: linear-gradient(145deg, #1e2235, #141728);
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+    margin-bottom: 30px;
+}
+
+.search-input {
+    background-color: #0f1325;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+    .search-input::placeholder {
+        color: #9aa3ff;
+    }
+
+    .search-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.4);
+        background-color: #0f1325;
+    }
+
+/* ==== RESULTADOS ==== */
+
+.results-card {
+    background: linear-gradient(145deg, #1e2235, #141728);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.04);
+    margin-bottom: 10px;
+    transition: background 0.2s ease;
+}
+
+    .result-item:hover {
+        background-color: rgba(124, 92, 255, 0.15);
+    }
+
+    .result-item label {
+        margin: 0;
         cursor: pointer;
     }
+

@@ -50,19 +50,16 @@
                     <label class="form-label">Contraseña</label>
 
                     <div class="input-group login-input">
-                        <!-- Candado -->
                         <span class="input-group-text">
                             <i class="fa-solid fa-lock"></i>
                         </span>
 
-                        <!-- Input -->
                         <input asp-for="AdministrativoPassword"
                                type="password"
                                class="form-control"
                                id="passwordInput"
                                placeholder="••••••••" />
 
-                        <!-- Ojo -->
                         <span class="input-group-text password-toggle"
                               onclick="togglePassword()">
                             <i class="fa-solid fa-eye" id="eyeIcon"></i>
@@ -73,8 +70,18 @@
                           class="text-danger small"></span>
                 </div>
 
-                <!-- Forgot -->
-                <div class="text-end mb-3">
+                <!-- Remember + Forgot -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <!-- Remember Me -->
+                    <<div class="form-check mb-3">
+                        <label class="form-check-label">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+
+                    <!-- Forgot -->
                     <a href="#" class="forgot-link">¿Olvidó su contraseña?</a>
                 </div>
 
