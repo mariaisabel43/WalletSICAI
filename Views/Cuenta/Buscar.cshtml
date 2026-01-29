@@ -1,0 +1,28 @@
+@model List<Estudiante>
+
+<h3>Resultados de búsqueda</h3>
+
+<form asp-action="Buscar" method="get">
+    <input type="text" name="buscar" placeholder="Buscar estudiante" class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+</form>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Cedula</th>
+            <th>Saldo actual</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var estudiante in Model)
+        {
+            <tr>
+                <td>@estudiante.EstudianteNombreCompleto</td>
+                <td>@estudiante.EstudianteCedula</td>
+                <td>@estudiante.MontoActual</td>
+            </tr>
+        }
+    </tbody>
+</table>
