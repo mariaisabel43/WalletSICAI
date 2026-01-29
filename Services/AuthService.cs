@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WalletSICAI.Models;
 
 namespace WalletSICAI.Services
@@ -20,6 +21,13 @@ namespace WalletSICAI.Services
             if (user == null) return false;
 
             return user.AdministrativoPassword == password; 
+        }
+        //Metodo de busqueda
+        public async Task<List<Estudiante>> BuscarEstudiantesAsync(string buscar) 
+        { 
+            return await _context.Estudiantes
+                .Where(u => u.EstudianteCedula.Contains(buscar) 
+                || u.EstudianteNombreCompleto.Contains(buscar)).ToListAsync();
         }
     }
 }
