@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity;
@@ -44,6 +44,12 @@ namespace WalletSICAI.Controllers
                 }
             }
             return View(model);
+        }
+        [HttpGet] 
+        public async Task<IActionResult> Buscar(string buscar) 
+        { 
+            var resultados = await _authService.BuscarEstudiantesAsync(buscar); 
+            return View(resultados); 
         }
         public IActionResult Logout()
         {
