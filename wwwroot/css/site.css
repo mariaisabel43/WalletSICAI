@@ -368,34 +368,48 @@ select:-webkit-autofill {
         color: #ffffff;
     }
 
-/* ==== BÚSQUEDA  ==== */
-
-.search-card {
+/* ==== BÚSQUEDA ==== */ .search-card {
     background: linear-gradient(145deg, #1e2235, #141728);
     border-radius: 18px;
     padding: 28px;
     box-shadow: 0 18px 40px rgba(0,0,0,0.45);
     margin-bottom: 30px;
 }
+/* INPUT */
 
 .search-input {
     background-color: #0f1325;
     border: 1px solid rgba(255,255,255,0.1);
-    color: #ffffff;
     border-radius: 10px;
     padding: 12px 14px;
+    color: #ffffff !important;
+    caret-color: #9aa3ff;
 }
+    /* Texto del placeholder */
 
     .search-input::placeholder {
         color: #9aa3ff;
     }
+    /* Estados activos */
 
-    .search-input:focus {
+    .search-input:focus, .search-input:active {
+        background-color: #0f1325;
+        color: #ffffff !important;
         outline: none;
         box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.4);
-        background-color: #0f1325;
     }
+    /* Texto seleccionado */
 
+    .search-input::selection {
+        background-color: #7c5cff;
+        color: #ffffff;
+    }
+    /* Autofill Chrome */
+
+    .search-input:-webkit-autofill {
+        -webkit-text-fill-color: #ffffff !important;
+        transition: background-color 9999s ease-in-out 0s;
+    }
 /* ==== RESULTADOS ==== */
 
 .results-card {
@@ -423,4 +437,3 @@ select:-webkit-autofill {
         margin: 0;
         cursor: pointer;
     }
-
