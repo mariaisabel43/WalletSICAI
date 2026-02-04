@@ -437,3 +437,94 @@ select:-webkit-autofill {
         margin: 0;
         cursor: pointer;
     }
+
+/* =========================
+   MODAL ESTUDIANTE 
+   ========================= */
+
+.modal-content {
+    background-color: #0f1325 !important;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: rgba(255,255,255,0.06);
+}
+
+.modal-header {
+    padding-bottom: 16px;
+}
+
+.modal-footer {
+    padding-top: 16px;
+}
+
+/* =========================
+   CONTENIDO ESTUDIANTE
+   ========================= */
+
+.estudiante-info {
+    padding: 8px 4px;
+}
+
+/* IMPORTANTE:
+   Quitamos el "efecto tarjeta"
+   para que no se vea doble */
+.estudiante-info-card {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* Avatar del estudiante */
+.student-avatar {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, #7c5cff, #4f46e5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 22px;
+}
+
+/* Filas de información */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+    .info-row:first-of-type {
+        border-top: none;
+    }
+
+/* Etiquetas */
+.info-label {
+    color: #9aa3ff;
+    font-size: 0.9rem;
+}
+
+/* Valores */
+.info-value {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+    /* Saldo */
+    .info-value.saldo {
+        color: #22c55e;
+        font-weight: 600;
+    }
+
+
+

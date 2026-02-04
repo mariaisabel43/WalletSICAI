@@ -1,10 +1,70 @@
-﻿@model WalletSICAI.Models.Estudiante
+﻿@model Estudiante
 
-<ul class="list-group">
-    <li class="list group-item">
-        <strong>Nombre Completo:</strong> @Model.EstudianteNombreCompleto"</li>
-    <li class="list group-item">
-        <strong></strong>Cédula:</strong> @Model.EstudianteCedula</li>
-    <li class="list group-item">
-        <strong>Saldo Actual:</strong> @Model.MontoActual</li>
-</ul>
+<div class="estudiante-info-card">
+
+    <!-- HEADER -->
+    <div class="d-flex align-items-center mb-4">
+        <div class="student-avatar me-3">
+            <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div>
+            <h5 class="mb-0 text-white">
+                @Model.EstudianteNombreCompleto
+            </h5>
+            <small class="text-secondary">
+                Información general del estudiante
+            </small>
+        </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="estudiante-info">
+
+        <div class="info-row">
+            <span class="info-label">Cédula</span>
+            <span class="info-value">@Model.EstudianteCedula</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Fecha de nacimiento</span>
+            <span class="info-value">
+                @(
+                                Model.EstudianteFechaNacimiento
+                                .ToDateTime(TimeOnly.MinValue)
+                                .ToString("dd/MM/yyyy")
+                                )
+            </span>
+        </div>
+
+
+        <div class="info-row">
+            <span class="info-label">Sección</span>
+            <span class="info-value">
+                @(string.IsNullOrEmpty(Model.EstudianteSeccion)
+                                ? "No asignada"
+                                : Model.EstudianteSeccion)
+            </span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Saldo actual</span>
+            <span class="info-value saldo">
+                ₡@Model.MontoActual
+            </span>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
