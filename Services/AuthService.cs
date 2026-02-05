@@ -30,14 +30,14 @@ namespace WalletSICAI.Services
 
         Devuelve true si coincide, false si no.
          */
-        public async Task<bool> LoginAsync(string email, string password)
+        public async Task<Administrativo?> LoginAsync(string email, string password)
         {
             var user = await _context.Administrativos
                 .FirstOrDefaultAsync(u => u.AdministrativoEmail == email);
 
-            if (user == null) return false;
+            if (user == null) return null;
 
-            return user.AdministrativoPassword == password; 
+            return user.AdministrativoPassword == password ? user : null;
         }
         //Metodo de busqueda
         /*
@@ -54,12 +54,32 @@ namespace WalletSICAI.Services
                 .Where(u => u.EstudianteCedula.Contains(buscar) 
                 || u.EstudianteNombreCompleto.Contains(buscar)).ToListAsync();
         }
+        /*Modal*/
         public async Task<Estudiante?> ObtenerEstudiantePorCedula(string cedula)
         {
             return await _context.Estudiantes
                 .FirstOrDefaultAsync(e => e.EstudianteCedula == cedula);
         }
-        
+       
+        public async Task<bool> RecargaAsync(Recarga recarga, string estudianteCedula, string estudianteNombreCompleto)
+        {
+            var estudiante = await _context.Estudiantes
+                .FirstOrDefaultAsync(e => 
+                (!string.IsNullOrEmpty(estudianteCedula) && e.EstudianteCedula == estudianteCedula) || 
+                (!string.IsNullOrEmpty(estudianteNombreCompleto) && e.EstudianteNombreCompleto == estudianteNombreCompleto));
+            if (estudiante == null) return false;
+            // Asociar estudiante a la recarga
+            recarga.EstudianteId = estudiante.EstudianteId;
+            recarga.FechaRecarga = DateOnly.FromDateTime(DateTime.Now);
+
+            // Guardar recarga
+            _context.Recargas.Add(recarga);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+
     }
 }
 
