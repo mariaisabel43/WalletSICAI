@@ -132,14 +132,15 @@
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content bg-dark text-white border-0 rounded-4 shadow-lg">
 
+                        <!-- HEADER -->
                         <div class="modal-header border-0">
                             <h5 class="modal-title">
                                 <i class="fa-solid fa-user-graduate me-2"></i>
                                 Información del Estudiante
                             </h5>
-                            @* <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button> *@
                         </div>
 
+                        <!-- BODY -->
                         <div class="modal-body" id="estudianteModalBody">
                             <div class="text-center py-5 text-secondary">
                                 <i class="fa-solid fa-circle-info fa-3x mb-3"></i>
@@ -147,15 +148,27 @@
                             </div>
                         </div>
 
-                        <div class="modal-footer border-0">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fa-solid fa-xmark me-2"></i> Cerrar
+                        <!-- FOOTER -->
+                        <div class="modal-footer border-0 d-flex justify-content-end gap-2">
+
+                            <!-- BOTÓN RECARGAR -->
+                            <button type="button" class="btn btn-secondary">
+                                <i class="fa-solid fa-wallet me-2"></i>
+                                Recargar
                             </button>
+
+                            <!-- BOTÓN CERRAR -->
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-xmark me-2"></i>
+                                Cerrar
+                            </button>
+
                         </div>
 
                     </div>
                 </div>
             </div>
+
 
         </main>
     </div>
