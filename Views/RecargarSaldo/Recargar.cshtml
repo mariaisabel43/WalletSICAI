@@ -56,37 +56,3 @@
 {
     <div class="alert alert-danger mt-3">@TempData["Error"]</div>
 }
-
-@*
-
-@model WalletSICAI.Models.Recarga
-
-
-@{
-    ViewData["Title"] = "Recarda de Saldo";
-    Layout = null;
-}
-<form asp-action="Recargar" method="post">
-    <div class="mb-3">
-        <label class="form-label">Cédula del estudiante</label>
-        <input asp-for="EstudianteId" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Monto</label>
-        <input asp-for="MontoRecarga" type="number" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Modo de pago</label>
-        <select asp-for="ModoPagoRecarga" class="form-select">
-            <option value="Efectivo">Efectivo</option>
-            <option value="Tarjeta">Tarjeta</option>
-            <option value="Transferencia">Transferencia</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-success">Recargar</button>
-</form>
-
-*@

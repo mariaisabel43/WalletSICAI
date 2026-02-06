@@ -41,13 +41,14 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fa-solid fa-wallet"></i> Recargar Saldo
-                    </a>
-                </li>
+                     <a class="nav-link" asp-controller="RecargarSaldo" asp-action="Recargar">
+                         <i class="fa-solid fa-wallet"></i> Recargar Saldo
+                     </a>
+                 </li>
+
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" asp-controller="Historial" asp-action="BuscarEstudiante">
                         <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas
                     </a>
                 </li>
@@ -93,12 +94,14 @@
 
                 <!-- CARD HISTORIAL -->
                 <div class="col-md-4">
-                    <div class="card admin-card text-center">
-                        <div class="card-body">
-                            <i class="fa-solid fa-clock-rotate-left fa-2x text-warning"></i>
-                            <h5 class="card-title mt-3">Historial de Recargas</h5>
+                    <a asp-controller="RecargarSaldo" asp-action="Recargar" class="text-decoration-none">
+                        <div class="card admin-card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-wallet fa-2x text-success"></i>
+                                <h5 class="card-title mt-3">Recargar Saldo</h5>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
             </div>

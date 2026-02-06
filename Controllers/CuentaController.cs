@@ -34,7 +34,7 @@ namespace WalletSICAI.Controllers
                     var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, model.AdministrativoEmail),
-                new Claim("AdministrativoId", usuario.AdministrativoId.ToString()) // 👈 Guardamos el ID
+                new Claim("AdministrativoId", usuario.AdministrativoId.ToString()) 
             };
 
                     var identity = new ClaimsIdentity(claims, "MiCookieAuth");
@@ -53,31 +53,6 @@ namespace WalletSICAI.Controllers
             return View(model);
         }
 
-        /*Login Funcional*/
-        /*public async Task<IActionResult> Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var usuarioValido = await _authService.LoginAsync(model.AdministrativoEmail, model.AdministrativoPassword);
-                if (usuarioValido) 
-                {
-                    var claims = new List<Claim> 
-                    {
-                        new Claim(ClaimTypes.Name, model.AdministrativoEmail) 
-                    }; 
-                    var identity = new ClaimsIdentity(claims, "MiCookieAuth");
-                    var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync("MiCookieAuth", principal);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Credenciales inválidas");
-                    return View(model);
-                }
-            }
-            return View(model);
-        }*/
 
         public IActionResult Logout()
         {
