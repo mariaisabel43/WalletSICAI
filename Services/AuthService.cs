@@ -68,36 +68,8 @@ namespace WalletSICAI.Services
                 .ToListAsync();
         }
 
-
-        //Historial por estudiante
-        /*public async Task<List<VwHistorialRecarga>> ObtenerHistorialEstudianteAsync(string cedula)
-        {
-            return await _context.VwHistorialRecargas
-                .Where(v => v.EstudianteCedula == cedula)
-                .OrderByDescending(v => v.FechaRecarga)
-                .ToListAsync();
-        }*/
-
     }
 }
 
 
-/*
- Contexto general
-AuthService es un servicio de lógica de negocio que encapsula dos responsabilidades principales:
 
-Login de administrativos (validar credenciales).
-
-Búsqueda de estudiantes (filtrar por cédula o nombre completo).
-
-Se apoya en WalletContext, que es tu DbContext de Entity Framework Core, encargado de conectarse a la base de datos.
-
- Resumen
- AuthService centraliza la lógica de login y búsqueda de estudiantes.
-
-Se conecta a la base de datos mediante WalletContext.
-
-LoginAsync valida credenciales de administrativos.
-
-BuscarEstudiantesAsync devuelve estudiantes filtrados por cédula o nombre.
-*/
