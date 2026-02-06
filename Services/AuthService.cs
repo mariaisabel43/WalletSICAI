@@ -78,7 +78,30 @@ namespace WalletSICAI.Services
 
             return true;
         }
+        public async Task<List<VwHistorialRecarga>> ObtenerHistorialEstudianteAsync(string cedula, string? nombreCompleto = null)
+        {
+            var query = _context.VwHistorialRecargas.AsQueryable();
 
+            if (!string.IsNullOrEmpty(cedula))
+                query = query.Where(v => v.EstudianteCedula == cedula);
+
+            if (!string.IsNullOrEmpty(nombreCompleto))
+                query = query.Where(v => v.EstudianteNombreCompleto.Contains(nombreCompleto));
+
+            return await query
+                .OrderByDescending(v => v.FechaRecarga)
+                .ToListAsync();
+        }
+
+
+        //Historial por estudiante
+        /*public async Task<List<VwHistorialRecarga>> ObtenerHistorialEstudianteAsync(string cedula)
+        {
+            return await _context.VwHistorialRecargas
+                .Where(v => v.EstudianteCedula == cedula)
+                .OrderByDescending(v => v.FechaRecarga)
+                .ToListAsync();
+        }*/
 
     }
 }

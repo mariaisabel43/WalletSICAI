@@ -1,0 +1,27 @@
+﻿@model IEnumerable<VwHistorialRecarga> 
+<h2>Historial de recargas</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Estudiante</th>
+            <th>Cédula</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+            <th>Administrador</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model)
+        {
+            <tr>
+                <td>@v.EstudianteNombreCompleto</td>
+                <td>@v.EstudianteCedula</td>
+                <td>@v.MontoRecarga</td>
+                <td>@v.FechaRecarga</td>
+                <td>@v.AdministrativoNombreCompleto</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
