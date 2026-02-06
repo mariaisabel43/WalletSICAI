@@ -52,8 +52,7 @@ namespace WalletSICAI.Controllers
             }
             return View(model);
         }
-
-
+        
         public IActionResult Logout()
         {
             return RedirectToAction("Index", "Home");
