@@ -437,3 +437,176 @@ select:-webkit-autofill {
         margin: 0;
         cursor: pointer;
     }
+
+/* =========================
+   MODAL ESTUDIANTE 
+   ========================= */
+
+.modal-content {
+    background-color: #0f1325 !important;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: rgba(255,255,255,0.06);
+}
+
+.modal-header {
+    padding-bottom: 16px;
+}
+
+.modal-footer {
+    padding-top: 16px;
+}
+
+/* =========================
+   CONTENIDO ESTUDIANTE
+   ========================= */
+
+.estudiante-info {
+    padding: 8px 4px;
+}
+
+.estudiante-info-card {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* Avatar del estudiante */
+.student-avatar {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, #7c5cff, #4f46e5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 22px;
+}
+
+/* Filas de información */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+    .info-row:first-of-type {
+        border-top: none;
+    }
+
+/* Etiquetas */
+.info-label {
+    color: #9aa3ff;
+    font-size: 0.9rem;
+}
+
+/* Valores */
+.info-value {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+    /* Saldo */
+    .info-value.saldo {
+        color: #22c55e;
+        font-weight: 600;
+    }
+
+/* =========================
+   RECARGA - FORMULARIO
+========================= */
+
+.recarga-form {
+    background: linear-gradient(145deg, #1b1f2e, #141728);
+    border-radius: 18px;
+    border: none;
+    box-shadow: 0 16px 35px rgba(0,0,0,0.45);
+    color: #ffffff;
+}
+
+    /* INPUTS */
+    .recarga-form .form-control,
+    .recarga-form .form-select {
+        background-color: #0d1020 !important;
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #ffffff !important;
+        border-radius: 10px;
+    }
+
+        /* Placeholder */
+        .recarga-form .form-control::placeholder {
+            color: rgba(255,255,255,0.45);
+        }
+
+        /* Focus (MUCHO más sutil) */
+        .recarga-form .form-control:focus,
+        .recarga-form .form-select:focus {
+            background-color: #0d1020 !important;
+            color: #ffffff !important;
+            border-color: #5b6cff;
+            box-shadow: 0 0 0 1px rgba(91,108,255,0.35);
+        }
+
+    /* Autofill Chrome */
+    .recarga-form input:-webkit-autofill {
+        -webkit-text-fill-color: #ffffff !important;
+        -webkit-box-shadow: 0 0 0px 1000px #0d1020 inset;
+    }
+
+/* =========================
+   RECARGA – FORM SIN BORDE
+========================= */
+
+.recarga-form {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+}
+
+    /* El contenedor interno visual */
+    .recarga-form > * {
+        border: none;
+    }
+
+/* Si quieres mantener fondo bonito SIN marco */
+.recarga-form {
+    background: linear-gradient(145deg, #1b1f2e, #141728) !important;
+    border-radius: 18px;
+    padding: 2rem;
+}
+
+/* =========================
+   CONTENEDOR RECARGA
+   SIN BORDE / SIN SOMBRA
+========================= */
+
+.recarga-wrapper {
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.card {
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* =========================
+   CONTENEDOR RECARGA
+========================= */
+
+/* Contenedor del formulario de recarga */
+.recarga-container {
+    background-color: rgb(27, 33, 55) !important;
+}

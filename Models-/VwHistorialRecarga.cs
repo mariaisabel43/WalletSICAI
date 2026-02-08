@@ -15,5 +15,11 @@ public partial class VwHistorialRecarga
 
     public DateOnly? FechaRecarga { get; set; }
 
+    //public string? SolicitanteRecargaNombre { get; set; }
+
+    //public string? SolicitanteRecargaApellido { get; set; }
+
+    //public string? SolicitanteRecargaCedula { get; set; }
+
     public string AdministrativoNombreCompleto { get; set; } = null!;
 }

@@ -1,28 +1,137 @@
-﻿@model IEnumerable<VwHistorialRecarga> 
+﻿@model IEnumerable<WalletSICAI.Models.VwHistorialRecarga>
 
-<h2>Historial de recargas por estudiante</h2>
+@{
+    ViewData["Title"] = "Historial de Recargas";
+    Layout = null;
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Estudiante</th>
-            <th>Cédula</th>
-            <th>Monto</th>
-            <th>Fecha</th>
-            <th>Administrador</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var v in Model)
-        {
-            <tr>
-                <td>@v.EstudianteNombreCompleto</td>
-                <td>@v.EstudianteCedula</td>
-                <td>@v.MontoRecarga</td>
-                <td>@v.FechaRecarga</td>
-                <td>@v.AdministrativoNombreCompleto</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Historial de Recargas</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+
+    <!-- CSS propio -->
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body class="admin-body">
+
+    <div class="d-flex">
+
+        <!-- ================= SIDEBAR ================= -->
+        <nav class="admin-sidebar">
+            <h4 class="sidebar-title">Wallet SICAI</h4>
+
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <i class="fa-solid fa-house"></i> Menú Principal
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="DatosEstudiantes" asp-action="Buscar">
+                        <i class="fa-solid fa-magnifying-glass"></i> Consulta de Saldo
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="RecargarSaldo" asp-action="Recargar">
+                        <i class="fa-solid fa-wallet"></i> Recargar Saldo
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" asp-controller="Historial" asp-action="BuscarEstudiante">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-calendar"></i> Historial General de Recargas
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <a class="nav-link" href="#">
+                    <i class="fa-solid fa-gear"></i> Settings
+                </a>
+                <a class="nav-link logout" asp-controller="Cuenta" asp-action="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                </a>
+            </div>
+        </nav>
+
+        <!-- ================= CONTENIDO ================= -->
+        <main class="admin-main flex-grow-1 p-5">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="text-white mb-1">Historial de Recargas</h2>
+                    <p class="text-secondary mb-0">
+                        Detalle de las recargas realizadas al estudiante
+                    </p>
+                </div>
+
+                <a asp-action="BuscarEstudiante" class="btn btn-outline-light">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver a buscar
+                </a>
+            </div>
+
+            <!-- CARD HISTORIAL -->
+            <div class="results-card">
+
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-warning text-center">
+                        No se encontraron recargas para este estudiante.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Estudiante</th>
+                                    <th>Cédula</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Administrador</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var v in Model)
+                                {
+                                    <tr>
+                                        <td>@v.EstudianteNombreCompleto</td>
+                                        <td>@v.EstudianteCedula</td>
+                                        <td class="text-success fw-semibold">
+                                            ₡ @v.MontoRecarga
+                                        </td>
+                                        <td>@v.FechaRecarga</td>
+                                        <td>@v.AdministrativoNombreCompleto</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
+
 
