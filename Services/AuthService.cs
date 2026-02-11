@@ -71,5 +71,3 @@ namespace WalletSICAI.Services
     }
 }
 
-
-

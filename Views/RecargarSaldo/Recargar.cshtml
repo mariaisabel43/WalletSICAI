@@ -1,4 +1,5 @@
-﻿@model WalletSICAI.Models.Recarga
+﻿@using WalletSICAI.viewModels
+@model RecargaViewModel
 
 @{
     ViewData["Title"] = "Recargar saldo";
@@ -75,37 +76,71 @@
                     <i class="fa-solid fa-arrow-left me-2"></i> Volver al menú
                 </a>
             </div>
+            
 
             <!-- CARD -->
             <div class="recarga-container text-white p-4 rounded-4 mx-auto" style="max-width: 720px;">
-
-                @* <form asp-action="Recargar" method="post" class="card p-4 recarga-form"> *@
-                <form asp-action="Recargar" method="post" class="recarga-form">
-                @* <form asp-action="Recargar" method="post"  class="card p-4 bg-dark text-white recarga-form"> *@
-
+                <form asp-action="Recargar" method="post">
+                    <input type="hidden" asp-for="EstudianteId" />
 
                     <!-- DATOS ESTUDIANTE -->
                     <h5 class="mb-3 text-primary">
                         <i class="fa-solid fa-user-graduate me-2"></i> Datos del estudiante
                     </h5>
+                    <!-- Si vienen datos del modal, se muestran como solo lectura -->
+                    @if (!string.IsNullOrEmpty(Model.EstudianteCedula))
+                    {
+                        <p><strong>Cédula:</strong> @Model.EstudianteCedula</p>
+                        <p><strong>Nombre:</strong> @Model.EstudianteNombreCompleto</p>
+                        <input type="hidden" asp-for="EstudianteCedula" />
+                        <input type="hidden" asp-for="EstudianteNombreCompleto" />
+                    }
+                    else
+                    {
+                        <!-- Si no vienen datos, el usuario debe llenarlos -->
+                        <div class="mb-3">
+                            <label>Cédula del estudiante</label>
+                            <input name="EstudianteCedula" class="form-control bg-black text-white border-0"
+                                   placeholder="Ej: 1-2345-6789" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Nombre completo del estudiante</label>
+                            <input name="EstudianteNombreCompleto" class="form-control bg-black text-white border-0"
+                                   placeholder="Ej: Juan Pérez" />
+                        </div>
+                    }
+                    <!--
+                @* <form asp-action="Recargar" method="post" class="card p-4 recarga-form"> *@
+                <form asp-action="Recargar" method="post" class="recarga-form">
+                @* <form asp-action="Recargar" method="post"  class="card p-4 bg-dark text-white recarga-form"> *@
 
-                    <div class="mb-3">
-                        <label class="form-label">Nombre completo del estudiante</label>
-                        <input name="EstudianteNombreCompleto" class="form-control bg-black text-white border-0"
-                               placeholder="Ej: Juan Pérez" />
-                    </div>
 
+                     DATOS ESTUDIANTE
+                    <h5 class="mb-3 text-primary">
+                        <i class="fa-solid fa-user-graduate me-2"></i> Datos del estudiante
+                    </h5>
                     <div class="mb-4">
                         <label class="form-label">Cédula del estudiante</label>
                         <input name="EstudianteCedula" class="form-control bg-black text-white border-0"
                                placeholder="Ej: 1-2345-6789" required />
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Nombre completo del estudiante</label>
+                        <input name="EstudianteNombreCompleto" class="form-control bg-black text-white border-0"
+                               placeholder="Ej: Juan Pérez" />
+                    </div>-->
+
                     <!-- SOLICITANTE -->
                     <h5 class="mb-3 text-primary">
                         <i class="fa-solid fa-user me-2"></i> Datos del solicitante
                     </h5>
-
+                    <div class="mb-4">
+                        <label class="form-label">Cédula del solicitante</label>
+                        <input asp-for="SolicitanteRecargaCedula"
+                               class="form-control bg-black text-white border-0"
+                               placeholder="Ej: 0987654321" required />
+                    </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nombre</label>
@@ -121,12 +156,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label">Cédula del solicitante</label>
-                        <input asp-for="SolicitanteRecargaCedula"
-                               class="form-control bg-black text-white border-0"
-                               placeholder="Ej: 0987654321" required />
-                    </div>
+                   
 
                     <div class="mb-4">
                         <label class="form-label">Correo electrónico</label>
