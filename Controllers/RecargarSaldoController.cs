@@ -39,6 +39,9 @@ namespace WalletSICAI.Controllers
                 vm.EstudianteNombreCompleto = string.Empty;
             }
 
+            ViewBag.Exito = TempData["Exito"];
+            ViewBag.Error = TempData["Error"];
+
             return View(vm);
         }
 
@@ -80,8 +83,13 @@ namespace WalletSICAI.Controllers
                 return View("Recargar", model);
             }
 
+            //TempData["Exito"] = "Recarga realizada con éxito.";
+            //return RedirectToAction("Recargar");
+
             TempData["Exito"] = "Recarga realizada con éxito.";
-            return RedirectToAction("Recargar");
+            return RedirectToAction("Recargar", new { cedula = model.EstudianteCedula });
+
+
         }
 
 

@@ -80,7 +80,71 @@
 
             <!-- CARD -->
             <div class="recarga-container text-white p-4 rounded-4 mx-auto" style="max-width: 720px;">
-                <form asp-action="Recargar" method="post">
+
+               @*  @if (ViewBag.Exito != null)
+                {
+                    <div class="alert alert-success mt-3 text-center">
+                        @ViewBag.Exito
+                    </div>
+                }
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger mt-3 text-center">
+                        @ViewBag.Error
+                    </div>
+                } *@
+
+                @if (TempData["Exito"] != null)
+                {
+                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                        <div id="toastExito" class="toast align-items-center text-bg-success border-0 show" role="alert">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    <i class="fa-solid fa-circle-check me-2"></i>
+                                    @TempData["Exito"]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        setTimeout(function () {
+                            var toast = document.getElementById('toastExito');
+                            if (toast) {
+                                toast.classList.remove('show');
+                            }
+                        }, 3000);
+                    </script>
+                }
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                        <div id="toastError" class="toast align-items-center text-bg-danger border-0 show" role="alert">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    <i class="fa-solid fa-circle-xmark me-2"></i>
+                                    @TempData["Error"]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        setTimeout(function () {
+                            var toast = document.getElementById('toastError');
+                            if (toast) {
+                                toast.classList.remove('show');
+                            }
+                        }, 3000);
+                    </script>
+                }
+
+
+                @* <form asp-action="Recargar" method="post"> *@
+                <form asp-action="Recargar" method="post" id="recargaForm" class="recarga-form">
+
                     <input type="hidden" asp-for="EstudianteId" />
 
                     <!-- DATOS ESTUDIANTE -->
@@ -100,12 +164,12 @@
                         <!-- Si no vienen datos, el usuario debe llenarlos -->
                         <div class="mb-3">
                             <label>Cédula del estudiante</label>
-                            <input name="EstudianteCedula" class="form-control bg-black text-white border-0"
+                            <input name="EstudianteCedula" class="form-control text-white border-0"
                                    placeholder="Ej: 1-2345-6789" required />
                         </div>
                         <div class="mb-3">
                             <label>Nombre completo del estudiante</label>
-                            <input name="EstudianteNombreCompleto" class="form-control bg-black text-white border-0"
+                            <input name="EstudianteNombreCompleto" class="form-control text-white border-0"
                                    placeholder="Ej: Juan Pérez" />
                         </div>
                     }
@@ -138,20 +202,20 @@
                     <div class="mb-4">
                         <label class="form-label">Cédula del solicitante</label>
                         <input asp-for="SolicitanteRecargaCedula"
-                               class="form-control bg-black text-white border-0"
+                               class="form-control text-white border-0"
                                placeholder="Ej: 0987654321" required />
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nombre</label>
                             <input asp-for="SolicitanteRecargaNombre"
-                                   class="form-control bg-black text-white border-0"
+                                   class="form-control text-white border-0"
                                    placeholder="Ej: María" required />
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Apellido</label>
                             <input asp-for="SolicitanteRecargaApellido"
-                                   class="form-control bg-black text-white border-0"
+                                   class="form-control text-white border-0"
                                    placeholder="Ej: García" required />
                         </div>
                     </div>
@@ -162,7 +226,7 @@
                         <label class="form-label">Correo electrónico</label>
                         <input asp-for="SolicitanteRecargaEmail"
                                type="email"
-                               class="form-control bg-black text-white border-0"
+                               class="form-control  text-white border-0"
                                placeholder="Ej: correo@ejemplo.com" />
                     </div>
 
@@ -175,13 +239,13 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Monto</label>
                             <input asp-for="MontoRecarga" type="number"
-                                   class="form-control bg-black text-white border-0"
+                                   class="form-control text-white border-0"
                                    placeholder="₡ 0.00" required />
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Modo de pago</label>
                             <select asp-for="ModoPagoRecarga"
-                                    class="form-select bg-black text-white border-0" required>
+                                    class="form-select text-white border-0" required>
                                 <option value="Efectivo">Efectivo</option>
                                 <option value="Tarjeta">Tarjeta</option>
                                 <option value="Transferencia">Transferencia</option>
@@ -190,15 +254,27 @@
                     </div>
 
                     <!-- BOTONES -->
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary w-100 mb-2">
+                    <div class="mt-4 d-grid gap-2">
+
+                        <button type="button"
+                                class="btn btn-primary w-100 mb-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmarRecargaModal">
                             <i class="fa-solid fa-wallet me-2"></i> Realizar recarga
                         </button>
+
+
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelarModal">
+                            <i class="fa-solid fa-xmark me-2"></i> Cancelar
+                        </button>
+
+
                     </div>
+
 
                 </form>
 
-                @if (TempData["Exito"] != null)
+               @*  @if (TempData["Exito"] != null)
                 {
                     <div class="alert alert-success mt-3 text-center">
                         @TempData["Exito"]
@@ -210,12 +286,130 @@
                     <div class="alert alert-danger mt-3 text-center">
                         @TempData["Error"]
                     </div>
+                } *@
+              @*   @if (ViewBag.Exito != null)
+                {
+                    <div class="alert alert-success mt-3 text-center">
+                        @ViewBag.Exito
+                    </div>
                 }
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger mt-3 text-center">
+                        @ViewBag.Error
+                    </div>
+                } *@
+
+
 
             </div>
 
+            <!-- MODAL CONFIRMAR RECARGA -->
+            <div class="modal fade" id="confirmarRecargaModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-white border-0 rounded-4">
+
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title text-primary">
+                                <i class="fa-solid fa-circle-check me-2"></i>
+                                Confirmar recarga
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body text-center">
+                            <p class="mb-0">
+                                ¿Está seguro que desea realizar esta recarga?
+                            </p>
+                            <small class="text-secondary">
+                                Se guardará la información en el sistema.
+                            </small>
+                        </div>
+
+                       <div class="modal-footer border-0 justify-content-center gap-3">
+
+    <button type="button"
+            class="btn btn-primary px-4"
+            onclick="confirmarRecarga()">
+        Sí, realizar
+    </button>
+
+    <button type="button"
+            class="btn btn-outline-light px-4"
+            data-bs-dismiss="modal">
+        No
+    </button>
+
+</div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- MODAL CONFIRMAR CANCELACIÓN -->
+            <div class="modal fade" id="cancelarModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-white border-0 rounded-4">
+
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title text-danger">
+                                <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                                Confirmar cancelación
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body text-center">
+                            <p class="mb-0">
+                                ¿Está seguro que desea cancelar esta recarga?
+                            </p>
+                            <small class="text-secondary">
+                                Se eliminarán todos los datos ingresados.
+                            </small>
+                        </div>
+
+                        <div class="modal-footer border-0 justify-content-center">
+                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                                No
+                            </button>
+                            <button type="button" class="btn btn-danger px-4" onclick="cancelarRecarga()">
+                                Sí, cancelar
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
         </main>
     </div>
+
+    <script>
+        function confirmarRecarga() {
+            var form = document.getElementById("recargaForm");
+
+           // Cierra el modal
+            var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarRecargaModal'));
+            modal.hide();
+
+            // Envía el formulario
+            form.submit();
+        }
+    </script>
+
+    <script>
+        function cancelarRecarga() {
+            // Limpia el formulario
+            document.querySelector("form").reset();
+
+            // Cierra el modal
+            var modal = bootstrap.Modal.getInstance(document.getElementById('cancelarModal'));
+            modal.hide();
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
