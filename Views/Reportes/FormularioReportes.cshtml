@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Reporte de Recargas";
+}
+
+<h2>Generar Reporte de Recargas</h2>
+
+<form asp-controller="Reportes" asp-action="RecargasPorFecha" method="get">
+    <div class="form-group">
+        <label for="fecha">Seleccione la fecha:</label>
+        <input type="date" id="fecha" name="fecha" class="form-control" required />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Descargar Reporte</button>
+</form>

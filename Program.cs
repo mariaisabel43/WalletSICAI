@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using WalletSICAI.Models;
 using WalletSICAI.Services;
+using QuestPDF.Infrastructure;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 
 
@@ -19,6 +22,8 @@ builder.Services.AddAuthentication("MiCookieAuth").AddCookie("MiCookieAuth", opt
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddScoped<ReportService>();
 
 var app = builder.Build();
 
