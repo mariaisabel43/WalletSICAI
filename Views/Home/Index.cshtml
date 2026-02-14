@@ -49,13 +49,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Historial" asp-action="BuscarEstudiante">
-                        <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas
+                        <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas Estudiante
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Reportes" asp-action="FormularioReportes">
-                        <i class="fa-solid fa-calendar"></i> Historial General de Recargas
+                        <i class="fa-solid fa-file-pdf"></i> Reportes Historial Recargas
                     </a>
                 </li>
             </ul>
@@ -115,12 +115,14 @@
 
                 <!-- CARD HISTORIAL General -->
                 <div class="col-md-4">
-                    <div class="card admin-card text-center">
-                        <div class="card-body">
-                            <i class="fa-solid fa-calendar-days fa-2x" style="color:#c81e4a;"></i>
-                            <h5 class="card-title mt-3">Historial General de Recargas</h5>
+                    <a asp-controller="Reportes" asp-action="FormularioReportes" class="text-decoration-none">
+                        <div class="card admin-card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-file-pdf fa-2x" style="color:#c81e4a;"></i>
+                                <h5 class="card-title mt-3">Reportes Historial Recargas</h5>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
 

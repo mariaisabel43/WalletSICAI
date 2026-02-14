@@ -47,12 +47,12 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Historial" asp-action="BuscarEstudiante">
-                        <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas
+                        <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas Estudiante
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fa-solid fa-calendar"></i> Historial General de Recargas
+                    <a class="nav-link" asp-controller="Reportes" asp-action="FormularioReportes">
+                        <i class="fa-solid fa-file-pdf"></i> Reportes Historial Recargas
                     </a>
                 </li>
             </ul>
@@ -371,11 +371,11 @@
                         </div>
 
                         <div class="modal-footer border-0 justify-content-center">
-                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
-                                No
-                            </button>
                             <button type="button" class="btn btn-danger px-4" onclick="cancelarRecarga()">
                                 Sí, cancelar
+                            </button>
+                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                                No
                             </button>
                         </div>
 
