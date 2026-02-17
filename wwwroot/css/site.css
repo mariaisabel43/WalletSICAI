@@ -166,6 +166,44 @@ select:-webkit-autofill {
         cursor: pointer;
     }
 
+/* =========================
+   MODAL ERROR LOGIN (MEJORADO)
+========================= */
+
+.login-error-modal {
+    background: linear-gradient(145deg, #1b1f2e, #141728);
+    border-radius: 18px;
+    border: none;
+    box-shadow: 0 25px 55px rgba(0,0,0,0.65);
+}
+
+    /* Icono */
+    .login-error-modal i {
+        font-size: 3.4rem;
+        color: #c81e4a;
+        text-shadow: 0 0 15px rgba(200,30,74,0.45);
+    }
+
+    /* Título */
+    .login-error-modal h5 {
+        color: #ffffff;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    /* Texto descriptivo */
+    .login-error-modal p {
+        color: rgba(255,255,255,0.75);
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    /* Botón */
+    .login-error-modal .btn {
+        border-radius: 10px;
+        font-weight: 500;
+    }
+
 
 
 /* =========================
