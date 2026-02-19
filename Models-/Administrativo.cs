@@ -15,7 +15,7 @@ public partial class Administrativo
 
     public string AministrativoPuesto { get; set; } = null!;
 
-    public string AdministrativoPassword { get; set; } = null!;
+    public byte[]? AdministrativoPassword { get; set; } = null!;
 
     public byte[]? AdministrativoSalt { get; set; }
 

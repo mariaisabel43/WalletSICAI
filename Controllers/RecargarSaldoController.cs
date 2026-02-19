@@ -55,12 +55,21 @@ namespace WalletSICAI.Controllers
                 TempData["Error"] = "No se pudo identificar al administrador.";
                 return View("Recargar", model);
             }
+            int adminId = int.Parse(administrativoIdClaim); 
+            // Buscar administrador y estudiante
+            var admin = await _authService.ObtenerAdministrativoPorIdAsync(adminId); 
             var estudiante = await _authService.ObtenerEstudiantePorCedula(model.EstudianteCedula); 
-            if (estudiante == null) 
+            if (admin == null || estudiante == null) 
             { 
-                TempData["Error"] = "No se pudo realizar la recarga. Estudiante no encontrado."; 
-                return View("Recargar", model); }
-
+                TempData["Error"] = "No se pudo realizar la recarga. Administrador o estudiante no encontrado.";
+                return View("Recargar", model);
+            } 
+            // Validar que ambos pertenezcan a la misma institución
+            if (admin.InstitucionId != estudiante.InstitucionId) 
+            { 
+                TempData["Error"] = "No puede realizar recargas a estudiantes de otra institución."; 
+                return View("Recargar", model); 
+            }
             // Construir la entidad Recarga con los datos del ViewModel
             var recarga = new Recarga 
             { 
@@ -88,7 +97,6 @@ namespace WalletSICAI.Controllers
 
             TempData["Exito"] = "Recarga realizada con éxito.";
             return RedirectToAction("Recargar", new { cedula = model.EstudianteCedula });
-
 
         }
 

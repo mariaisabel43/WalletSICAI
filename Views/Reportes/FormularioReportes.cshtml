@@ -1,4 +1,7 @@
-﻿@{
+﻿@using WalletSICAI.viewModels
+@model IEnumerable<SolicitanteViewModel>
+
+@{
     ViewData["Title"] = "Reporte de Recargas";
     Layout = null;
 }
@@ -91,11 +94,30 @@
                 </h5>
 
                 <form asp-controller="Reportes"
-                      asp-action="RecargasPorFecha"
+                      asp-action="RecargasPorRango"
                       method="get"
                       class="recarga-form">
 
-                    <div class="mb-4">
+                    <div class="form-group"> 
+                        <label for="fechaInicio">Fecha inicio:</label> 
+                        <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" required /> 
+                    </div> 
+                    <div class="form-group"> 
+                        <label for="fechaFin">Fecha fin (opcional):</label>
+                        <input type="date" id="fechaFin" name="fechaFin" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitante">Solicitante (opcional):</label> 
+                        <select id="solicitante" name="solicitante" class="form-control">
+                            <option value="">-- Seleccione un solicitante --</option>
+                            @foreach (var s in Model) 
+                            { 
+                                <option value="@s.SolicitanteRecargaCedula">@s.SolicitanteRecargaNombreCompleto (@s.SolicitanteRecargaCedula)</option>
+                            } 
+                        </select> 
+                    </div>
+                   
+                    @*<div class="mb-4">
                         <label class="form-label">Seleccione la fecha</label>
                         <input type="date"
                                name="fecha"
