@@ -21,8 +21,11 @@ namespace WalletSICAI.Services
         
         // Método para obtener recargas filtradas
         public async Task<List<Recarga>> ObtenerRecargas(DateTime fechaInicio, DateTime? fechaFin, string? solicitante = null) 
-       { 
-            var query = _context.Recargas.AsQueryable(); 
+       {
+            var query = _context.Recargas
+                .Include(r => r.Estudiante) // Trae el estudiante relacionado
+                .AsQueryable();
+
             // Filtrar por fecha inicio
             query = query.Where(r => r.FechaRecarga >= DateOnly.FromDateTime(fechaInicio)); 
             // Filtrar por fecha fin si existe
@@ -103,7 +106,7 @@ namespace WalletSICAI.Services
             var logoPath = Path.Combine(
                 Directory.GetCurrentDirectory(),
                 "wwwroot", "images", "logo-wallet-sicai.png");
-
+                        
             var document = Document.Create(container =>
             {
                 container.Page(page =>
@@ -150,7 +153,7 @@ namespace WalletSICAI.Services
 
                         if (File.Exists(logoPath))
                         {
-                            row.ConstantItem(90)
+                            row.ConstantItem(50)
                                 .AlignRight()
                                 .AlignMiddle()
                                 .Element(container =>
@@ -170,6 +173,7 @@ namespace WalletSICAI.Services
                             columns.ConstantColumn(80);   // Fecha
                             columns.RelativeColumn();     // Solicitante
                             columns.RelativeColumn();     // Cédula
+                            columns.RelativeColumn();     // Nombre completo estudiante
                             columns.RelativeColumn();     // Modo de pago
                             columns.RelativeColumn();     // Monto
                         });
@@ -184,6 +188,10 @@ namespace WalletSICAI.Services
 
                             header.Cell().Background(Colors.Grey.Lighten3).Padding(7)
                                 .Text("Cédula").Bold();
+
+                            header.Cell().Background(Colors.Grey.Lighten3).Padding(7)
+                                .Text("Estudiante").Bold();
+
 
                             header.Cell().Background(Colors.Grey.Lighten3).Padding(7)
                                 .AlignCenter().Text("Modo de Pago").Bold();
@@ -208,6 +216,9 @@ namespace WalletSICAI.Services
 
                             table.Cell().Background(fondo).Padding(6)
                                 .Text(r.SolicitanteRecargaCedula);
+
+                            table.Cell().Background(fondo).Padding(6)
+                                .Text(r.Estudiante?.EstudianteNombreCompleto);
 
                             table.Cell().Background(fondo).Padding(6)
                                 .AlignCenter()

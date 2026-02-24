@@ -20,24 +20,39 @@ namespace WalletSICAI.Services
         {
             var user = await _context.Administrativos
                 .FirstOrDefaultAsync(u => u.AdministrativoEmail == email);
-
             if (user == null) return null;
-
             // ?? Usar Unicode porque SQL CONVERT usa UTF-16
             var passwordBytes = Encoding.Unicode.GetBytes(password);
-
             // Concatenar con la sal
             var passwordWithSalt = passwordBytes.Concat(user.AdministrativoSalt).ToArray();
-
             // Calcular hash
             using var sha256 = SHA256.Create();
             var inputHash = sha256.ComputeHash(passwordWithSalt);
-
             // Comparar con el hash almacenado
             if (inputHash.SequenceEqual(user.AdministrativoPassword))
                 return user;
 
             return null;
+        }
+
+        public async Task<bool> ResetPasswordAsync(string email, string nuevaPassword)
+        {
+            var user = await _context.Administrativos
+                .FirstOrDefaultAsync(u => u.AdministrativoEmail == email);
+            if (user == null) return false;
+            // Generar nueva salt
+            var newSalt = RandomNumberGenerator.GetBytes(32);
+            // Concatenar nueva contraseña con la nueva sal
+            var newPasswordBytes = Encoding.Unicode.GetBytes(nuevaPassword);
+            var newPasswordWithSalt = newPasswordBytes.Concat(newSalt).ToArray();
+            // Calcular nuevo hash
+            using var sha256 = SHA256.Create();
+            var newHash = sha256.ComputeHash(newPasswordWithSalt);
+            // Actualizar usuario
+            user.AdministrativoSalt = newSalt;
+            user.AdministrativoPassword = newHash;
+            await _context.SaveChangesAsync();
+            return true;
         }
 
 

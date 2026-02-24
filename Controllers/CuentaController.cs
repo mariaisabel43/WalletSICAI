@@ -52,7 +52,15 @@ namespace WalletSICAI.Controllers
             }
             return View(model);
         }
-        
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(string email, string nuevaPassword)
+        {
+            var result = await _authService.ResetPasswordAsync(email, nuevaPassword);
+            if (!result)
+                return BadRequest("No se pudo actualizar la contraseña");
+            return Ok("Contraseña actualizada exitosamente");
+        }
+
         public IActionResult Logout()
         {
             return RedirectToAction("Index", "Home");
