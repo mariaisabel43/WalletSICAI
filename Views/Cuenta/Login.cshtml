@@ -82,7 +82,10 @@
                     </div>
 
                     <!-- Forgot -->
-                    <a href="#" class="forgot-link">¿Olvidó su contraseña?</a>
+                    @* <a href="#" class="forgot-link">¿Olvidó su contraseña?</a> *@
+                    <a href="#" class="forgot-link" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
+                        ¿Olvidó su contraseña?
+                    </a>
                 </div>
 
 
@@ -159,6 +162,322 @@
             });
         </script>
     }
+
+    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> *@
+
+    @* <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Restablecer contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form asp-action="ResetPassword" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Correo electrónico</label>
+                            <input type="email" name="email" class="form-control" placeholder="ejemplo@eduwallet.com" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nueva contraseña</label>
+                            <input type="password" name="nuevaPassword" class="form-control" placeholder="••••••••" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Actualizar contraseña</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div> *@
+
+    @* <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content reset-modal">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">
+                        <i class="fa-solid fa-key me-2 text-warning"></i>
+                        Restablecer contraseña
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-light small mb-4">
+                        Ingresa tu correo y define una nueva contraseña para acceder nuevamente.
+                    </p>
+
+                    <form asp-action="ResetPassword" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label text-light">Correo electrónico</label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control reset-input"
+                                   placeholder="ejemplo@eduwallet.com"
+                                   required />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-light">Nueva contraseña</label>
+
+                            <div class="input-group">
+                                <input type="password"
+                                       name="nuevaPassword"
+                                       class="form-control reset-input"
+                                       id="resetPasswordInput"
+                                       placeholder="••••••••"
+                                       required />
+
+                                <span class="input-group-text password-toggle"
+                                      onclick="toggleResetPassword()">
+                                    <i class="fa-solid fa-eye" id="resetEyeIcon"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn reset-btn w-100">
+                            Actualizar contraseña
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div> *@
+    @* <!-- MODAL RESET PASSWORD -->
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content reset-modal">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">
+                        <i class="fa-solid fa-key me-2"></i>
+                        Restablecer contraseña
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-light small mb-4">
+                        Ingresa tu correo y define una nueva contraseña para acceder nuevamente.
+                    </p>
+                    <form id="resetPasswordForm">
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label text-white">Correo electrónico</label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="ejemplo@eduwallet.com"
+                                   required />
+                        </div>
+
+                        <!-- Nueva contraseña -->
+                        <div class="mb-3">
+                            <label class="form-label text-white">Nueva contraseña</label>
+
+                            <div class="input-group">
+                                <input type="password"
+                                       name="nuevaPassword"
+                                       class="form-control"
+                                       id="newPasswordInput"
+                                       placeholder="••••••••"
+                                       required />
+
+                                <span class="input-group-text password-toggle"
+                                      onclick="toggleNewPassword()">
+                                    <i class="fa-solid fa-eye" id="newEyeIcon"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- MENSAJE ÉXITO -->
+                        <div id="resetSuccessMsg" class="alert alert-success text-center d-none">
+                            <i class="fa-solid fa-circle-check me-2"></i>
+                            Contraseña actualizada correctamente
+                        </div>
+
+                        <!-- BOTÓN -->
+                        <button type="submit" class="btn login-btn w-100 mt-2">
+                            Actualizar contraseña
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div> *@
+
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content reset-modal">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">
+                        <i class="fa-solid fa-key me-2 text-warning"></i>
+                        Restablecer contraseña
+                    </h5>
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-light small mb-4">
+                        Ingresa tu correo y define una nueva contraseña para acceder nuevamente.
+                    </p>
+
+                    <form id="resetPasswordForm">
+
+                        <div class="mb-3">
+                            <label class="form-label text-light">Correo electrónico</label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control reset-input"
+                                   placeholder="ejemplo@eduwallet.com"
+                                   required />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-light">Nueva contraseña</label>
+
+                            <div class="input-group">
+                                <input type="password"
+                                       name="nuevaPassword"
+                                       class="form-control reset-input"
+                                       id="resetPasswordInput"
+                                       placeholder="••••••••"
+                                       required />
+
+                                <span class="input-group-text password-toggle"
+                                      onclick="toggleResetPassword()">
+                                    <i class="fa-solid fa-eye" id="resetEyeIcon"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- MENSAJE DE ÉXITO -->
+                        <div id="resetSuccessMsg"
+                             class="alert alert-success text-center d-none mb-3">
+                            <i class="fa-solid fa-circle-check me-2"></i>
+                            Contraseña actualizada correctamente
+                        </div>
+
+                        <button type="submit" class="btn btn-primary reset-btn w-100">
+                            Actualizar contraseña
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+   @*  <script>
+        function toggleResetPassword() {
+            const input = document.getElementById("resetPasswordInput");
+            const icon = document.getElementById("resetEyeIcon");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script> *@
+@* 
+    <script>
+        // Mostrar / ocultar contraseña
+        function toggleNewPassword() {
+            const input = document.getElementById("newPasswordInput");
+            const icon = document.getElementById("newEyeIcon");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        // Envío del formulario SIN recargar página
+        document.getElementById("resetPasswordForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const successMsg = document.getElementById("resetSuccessMsg");
+
+            const response = await fetch("/reset-password", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                successMsg.classList.remove("d-none");
+
+                // cerrar modal + redirigir al login
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("resetPasswordModal"));
+                    modal.hide();
+                    window.location.href = "/Cuenta/Login";
+                }, 2000);
+            }
+        });
+    </script> *@
+
+    <script>
+        function toggleResetPassword() {
+            const input = document.getElementById("resetPasswordInput");
+            const icon = document.getElementById("resetEyeIcon");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        document.getElementById("resetPasswordForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const successMsg = document.getElementById("resetSuccessMsg");
+
+            const response = await fetch("/reset-password", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                successMsg.classList.remove("d-none");
+
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(
+                        document.getElementById("resetPasswordModal")
+                    );
+                    modal.hide();
+                    window.location.href = "/Cuenta/Login";
+                }, 2000);
+            }
+        });
+    </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

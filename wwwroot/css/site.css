@@ -204,7 +204,47 @@ select:-webkit-autofill {
         font-weight: 500;
     }
 
+/* RESET PASSWORD MODAL */
+.reset-modal {
+    background: linear-gradient(145deg, #1b1f2e, #141728);
+    border-radius: 18px;
+    border: none;
+    color: #ffffff;
+}
 
+    .reset-modal .form-control {
+        background-color: #2c3440 !important;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #ffffff !important;
+    }
+
+        .reset-modal .form-control::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+    .reset-modal .input-group-text {
+        background-color: #2c3440;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .reset-modal .alert-success {
+        background-color: rgba(40, 167, 69, 0.15);
+        border: 1px solid rgba(40, 167, 69, 0.4);
+        color: #9be5b5;
+    }
+
+.reset-btn {
+    background-color: #5b6cff;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+}
+
+    .reset-btn:hover {
+        background-color: #4a5af0;
+    }
 
 /* =========================
    Menu Principal
