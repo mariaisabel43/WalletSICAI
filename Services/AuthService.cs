@@ -130,6 +130,14 @@ namespace WalletSICAI.Services
                 .OrderByDescending(v => v.FechaRecarga)
                 .ToListAsync();
         }
+        public async Task<Estudiante?> ObtenerEstudianteGastosAsync(int estudianteId, int adminId)
+        {
+            return await _context.Estudiantes
+                .Include(e => e.GastosEstudiantes)
+                .FirstOrDefaultAsync(e => e.EstudianteId == estudianteId
+                                          && e.InstitucionId == adminId);
+        }
+
 
     }
 }

@@ -34,4 +34,6 @@ public partial class Estudiante
     public virtual Institucione? Institucion { get; set; }
 
     public virtual ICollection<Recarga> Recargas { get; set; } = new List<Recarga>();
+    public virtual ICollection<GastosEstudiante> GastosEstudiantes { get; set; }
+
 }

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<WalletSICAI.Models.Estudiante>
+
+<h2>Buscar Estudiantes</h2>
+
+<form asp-action="Buscar" method="post">
+    <div class="form-group">
+        <label for="buscar">Nombre o Cédula:</label>
+        <input type="text" name="buscar" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-warning">@ViewBag.Error</div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <h3>Resultados de búsqueda</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cédula</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var estudiante in Model)
+            {
+                <tr>
+                    <td>@estudiante.EstudianteNombreCompleto</td>
+                    <td>@estudiante.EstudianteCedula</td>
+                    <td>
+                        <a asp-action="Historial" asp-route-id="@estudiante.EstudianteId">Ver historial</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

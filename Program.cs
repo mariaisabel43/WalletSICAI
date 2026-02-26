@@ -17,7 +17,8 @@ builder.Services.AddDbContext<WalletContext>(options =>
 
 builder.Services.AddAuthentication("MiCookieAuth").AddCookie("MiCookieAuth", options => { 
     options.LoginPath = "/Cuenta/Login"; 
-    options.LogoutPath = "/Cuenta/Logout"; });
+    options.LogoutPath = "/Cuenta/Logout";
+});
 
 builder.Services.AddAuthorization();
 

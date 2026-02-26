@@ -26,6 +26,8 @@ public partial class WalletContext : DbContext
     public virtual DbSet<Recarga> Recargas { get; set; }
 
     public virtual DbSet<VwHistorialRecarga> VwHistorialRecargas { get; set; }
+    public virtual DbSet<GastosEstudiante> GastosEstudiantes { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { 
@@ -177,6 +179,26 @@ public partial class WalletContext : DbContext
             entity.Property(e => e.EstudianteNombreCompleto).HasMaxLength(201);
             entity.Property(e => e.HistorialId).HasColumnName("HistorialID");
         });
+
+        modelBuilder.Entity<GastosEstudiante>(entity =>
+        {
+            
+            entity.ToTable("GastosEstudiantes", t => t.ExcludeFromMigrations());
+
+            entity.HasKey(e => e.GastoID);
+
+            entity.Property(e => e.Descripcion)
+                  .HasMaxLength(250);
+
+            entity.Property(e => e.FechaGasto)
+                  .HasColumnType("date");
+
+            entity.HasOne(e => e.Estudiante)
+                  .WithMany(s => s.GastosEstudiantes)
+                  .HasForeignKey(e => e.EstudianteID)
+                  .HasConstraintName("FK_Gasto_Estudiante");
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

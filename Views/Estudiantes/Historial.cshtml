@@ -1,0 +1,22 @@
+﻿@model WalletSICAI.Models.Estudiante
+
+<h2>Historial de gastos de @Model.EstudianteNombreCompleto</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var gasto in Model.GastosEstudiantes)
+        {
+            <tr>
+                <td>@gasto.FechaGasto.ToShortDateString()</td>
+                <td>@gasto.Descripcion</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
