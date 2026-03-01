@@ -29,7 +29,7 @@
         <nav class="admin-sidebar">
             <h4 class="sidebar-title">Wallet SICAI</h4>
 
-            <ul class="nav flex-column mt-4">
+            <ul class="nav flex-column sidebar-nav">
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Index">
                         <i class="fa-solid fa-house"></i> Menú Principal
@@ -48,6 +48,7 @@
                     </a>
                 </li>
 
+
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Historial" asp-action="BuscarEstudiante">
                         <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas Estudiante
@@ -56,16 +57,19 @@
 
                 <li class="nav-item">
                     <a class="nav-link active" asp-controller="Reportes" asp-action="FormularioReportes">
-                        <i class="fa-solid fa-file-pdf"></i> Reportes Historial Recragas
+                        <i class="fa-solid fa-file-pdf"></i> Reportes Historial Recargas
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Estudiantes" asp-action="Buscar">
+                        <i class="fa-solid fa-sack-dollar"></i> Historial Gastos
                     </a>
                 </li>
             </ul>
 
             <div class="sidebar-bottom">
-                @* <a class="nav-link">
-                    <i class="fa-solid fa-gear"></i> Settings
-                </a> *@
-                <a class="nav-link logout">
+                <a class="nav-link logout" asp-controller="Cuenta" asp-action="Logout">
                     <i class="fa-solid fa-right-from-bracket"></i> Log Out
                 </a>
             </div>
