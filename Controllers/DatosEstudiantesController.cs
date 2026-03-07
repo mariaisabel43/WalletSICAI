@@ -22,14 +22,12 @@ namespace WalletSICAI.Controllers
                 return View();
             }
 
-            // Recuperar el Id del administrador desde el claim
             var adminIdClaim = User.FindFirst("AdministrativoId");
             if (adminIdClaim == null)
                 return Unauthorized();
 
             int adminId = int.Parse(adminIdClaim.Value);
 
-            // Usar AuthService para buscar estudiantes SOLO de la institución del administrador
             var estudiantes = await _authService.BuscarEstudiantesPorInstitucionAsync(buscar, adminId);
 
             if (!estudiantes.Any())

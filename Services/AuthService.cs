@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 using WalletSICAI.Models;
+using WalletSICAI.Models_;
 
 namespace WalletSICAI.Services
 {
@@ -58,18 +59,13 @@ namespace WalletSICAI.Services
 
         public async Task<List<Estudiante>> BuscarEstudiantesPorInstitucionAsync(string buscar, int adminId)
         {
-            // Buscar el administrador y su institución
             var admin = await _context.Administrativos
                 .FirstOrDefaultAsync(a => a.AdministrativoId == adminId);
 
             if (admin == null)
                 return new List<Estudiante>();
-
-            // Filtrar estudiantes de la misma institución
             var query = _context.Estudiantes
                 .Where(e => e.InstitucionId == admin.InstitucionId);
-
-            // Aplicar búsqueda adicional (por cédula o nombre)
             if (!string.IsNullOrEmpty(buscar))
             {
                 query = query.Where(e => e.EstudianteCedula.Contains(buscar)
@@ -79,14 +75,14 @@ namespace WalletSICAI.Services
             return await query.ToListAsync();
         }
 
-
-        //Metodo de busqueda
         public async Task<List<Estudiante>> BuscarEstudiantesAsync(string buscar) 
         { 
             return await _context.Estudiantes
                 .Where(u => u.EstudianteCedula.Contains(buscar) 
                 || u.EstudianteNombreCompleto.Contains(buscar)).ToListAsync();
         }
+
+
         /*Modal*/
         public async Task<Estudiante?> ObtenerEstudiantePorCedula(string cedula)
         {
@@ -130,14 +126,55 @@ namespace WalletSICAI.Services
                 .OrderByDescending(v => v.FechaRecarga)
                 .ToListAsync();
         }
+
         public async Task<Estudiante?> ObtenerEstudianteGastosAsync(int estudianteId, int adminId)
         {
             return await _context.Estudiantes
                 .Include(e => e.GastosEstudiantes)
                 .FirstOrDefaultAsync(e => e.EstudianteId == estudianteId
                                           && e.InstitucionId == adminId);
+
         }
 
+        // Crear gasto a estudiante
+        public async Task<bool> CrearGastoAsync(GastosEstudiante gasto, string estudianteCedula, string estudianteNombreCompleto)
+        {
+            // Buscar estudiante por cédula o nombre
+            var estudiante = await _context.Estudiantes
+                .FirstOrDefaultAsync(e =>
+                    (!string.IsNullOrEmpty(estudianteCedula) && e.EstudianteCedula == estudianteCedula) ||
+                    (!string.IsNullOrEmpty(estudianteNombreCompleto) && e.EstudianteNombreCompleto == estudianteNombreCompleto));
+
+            if (estudiante == null) return false;
+
+            // Validar que el tipo de gasto exista
+            var tipoGasto = await _context.TiposGastos
+                .FirstOrDefaultAsync(t => t.TipoGastoId == gasto.TipoGastoId);
+
+            if (tipoGasto == null) return false;
+
+            // Asignar datos obligatorios
+            gasto.EstudianteId = estudiante.EstudianteId;
+            gasto.FechaGasto = DateOnly.FromDateTime(DateTime.Now);
+            gasto.MontoGasto = tipoGasto.Precio; 
+
+            // Guardar gasto
+            _context.GastosEstudiantes.Add(gasto);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+
+        // Crear nuevo tipo de gasto
+        public async Task<bool> CrearTipoGastoAsync(TiposGasto tipo) 
+        { 
+            if (string.IsNullOrEmpty(tipo.Categoria) || tipo.Precio <= 0)
+                return false; 
+            _context.TiposGastos.Add(tipo); 
+            await _context.SaveChangesAsync(); 
+            return true; 
+        }
 
     }
 }

@@ -1,0 +1,93 @@
+﻿@using WalletSICAI.viewModels
+@model GastoViewModel
+
+@{
+    ViewData["Title"] = "Registrar Gasto a Estudiante";
+}
+
+<h2>Gestión de Estudiantes</h2>
+
+<ul class="nav nav-tabs" id="gestionTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="gasto-tab" data-bs-toggle="tab" data-bs-target="#gasto" type="button" role="tab">Registrar Gasto</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tipo-tab" data-bs-toggle="tab" data-bs-target="#tipo" type="button" role="tab">Registrar tipo gasto</button>
+    </li>
+</ul>
+
+<div class="tab-content mt-3" id="gestionTabsContent">
+    <!-- TAB: Registrar Gasto -->
+    <div class="tab-pane fade show active" id="gasto" role="tabpanel" aria-labelledby="gasto-tab">
+
+
+        <form asp-action="CrearGasto" method="post">
+            <div class="form-group">
+                <label asp-for="EstudianteCedula">Cédula del Estudiante</label>
+                <input asp-for="EstudianteCedula" class="form-control" />
+                <span asp-validation-for="EstudianteCedula" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EstudianteNombreCompleto">Nombre Completo</label>
+                <input asp-for="EstudianteNombreCompleto" class="form-control" />
+                <span asp-validation-for="EstudianteNombreCompleto" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TipoGastoId">Tipo de Gasto</label>
+                <select asp-for="TipoGastoId" class="form-control" id="tipoGastoSelect">
+                    <option value="">Seleccione un tipo</option>
+                    @foreach (var item in Model.TiposGasto)
+                    {
+                        <option value="@item.TipoGastoId" data-precio="@item.Precio">@item.Categoria</option>
+                    }
+                </select>
+                <span asp-validation-for="TipoGastoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MontoGasto">Monto</label>
+                <input asp-for="MontoGasto" class="form-control" id="montoInput" readonly />
+                <span asp-validation-for="MontoGasto" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Descripcion">Descripción</label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Registrar Gasto</button>
+        </form>
+
+        </div>
+
+
+</div> 
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById("tipoGastoSelect").addEventListener("change", function () {
+            var precio = this.options[this.selectedIndex].getAttribute("data-precio");
+            if (precio) {
+                document.getElementById("montoInput").value = precio;
+            }
+        });
+    </script>
+}
+@* 
+<script> 
+    document.getElementById("tipoGastoSelect").addEventListener("change", function () 
+{ 
+    var selectedOption = this.options[this.selectedIndex]; 
+    var precio = selectedOption.getAttribute("data-precio"); 
+    if (precio) 
+    { 
+        document.getElementById("montoInput").value = precio; 
+    } 
+}); }
+</script> *@

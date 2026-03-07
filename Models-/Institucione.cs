@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WalletSICAI.Models_;
 
 namespace WalletSICAI.Models;
 
@@ -14,4 +15,7 @@ public partial class Institucione
     public virtual ICollection<Administrativo> Administrativos { get; set; } = new List<Administrativo>();
 
     public virtual ICollection<Estudiante> Estudiantes { get; set; } = new List<Estudiante>();
+
+    public ICollection<TiposGasto> TiposGastos { get; set; }
+
 }

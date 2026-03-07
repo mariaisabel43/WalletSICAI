@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+using WalletSICAI.Models_;
 
 namespace WalletSICAI.Models;
 
@@ -26,7 +27,11 @@ public partial class WalletContext : DbContext
     public virtual DbSet<Recarga> Recargas { get; set; }
 
     public virtual DbSet<VwHistorialRecarga> VwHistorialRecargas { get; set; }
+
     public virtual DbSet<GastosEstudiante> GastosEstudiantes { get; set; }
+
+    public DbSet<TiposGasto> TiposGastos { get; set; }
+
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -182,10 +187,12 @@ public partial class WalletContext : DbContext
 
         modelBuilder.Entity<GastosEstudiante>(entity =>
         {
-            
-            entity.ToTable("GastosEstudiantes", t => t.ExcludeFromMigrations());
 
-            entity.HasKey(e => e.GastoID);
+        entity.ToTable("GastosEstudiantes", t => t.ExcludeFromMigrations());
+           
+            entity.ToTable(t => t.HasTrigger("trg_SetMontoGastoFromTipo"));
+
+        entity.HasKey(e => e.GastoId);
 
             entity.Property(e => e.Descripcion)
                   .HasMaxLength(250);
@@ -195,8 +202,40 @@ public partial class WalletContext : DbContext
 
             entity.HasOne(e => e.Estudiante)
                   .WithMany(s => s.GastosEstudiantes)
-                  .HasForeignKey(e => e.EstudianteID)
+                  .HasForeignKey(e => e.EstudianteId)
                   .HasConstraintName("FK_Gasto_Estudiante");
+
+            entity.HasOne(e => e.TipoGastos)
+                .WithMany(t => t.GastosEstudiantes)
+                .HasForeignKey(e => e.TipoGastoId) // ← clave explícita
+                .HasConstraintName("FK_Gasto_Tipo");
+
+          });
+
+        modelBuilder.Entity<TiposGasto>(entity =>
+        {
+            entity.ToTable("TiposGastos", t => t.ExcludeFromMigrations());
+
+            entity.HasKey(e => e.TipoGastoId);
+
+            entity.Property(e => e.Categoria)
+                  .HasMaxLength(100);
+
+            entity.Property(e => e.Precio)
+                  .HasColumnType("int");
+
+            entity.Property(e => e.InstitucionId).HasColumnName("InstitucionID");
+            entity.Property(e => e.AdministrativoId).HasColumnName("AdministrativoID");
+
+            entity.HasOne(e => e.Institucion)
+                  .WithMany(i => i.TiposGastos)
+                  .HasForeignKey(e => e.InstitucionId)
+                  .HasConstraintName("FK_TipoGasto_Institucion");
+
+            entity.HasOne(e => e.Administrativo)
+                  .WithMany(a => a.TiposGastos)
+                  .HasForeignKey(e => e.AdministrativoId)
+                  .HasConstraintName("FK_TipoGasto_Administrativo");
         });
 
 
