@@ -718,3 +718,28 @@ select:-webkit-autofill {
 .recarga-container {
     background-color: rgb(27, 33, 55) !important;
 }
+
+/* =========================
+   Gastos
+========================= */
+/* Inputs módulo de gastos */
+
+/* Estilo inputs solo para páginas de gastos */
+
+.gastos-page .form-control,
+.gastos-page .form-select {
+    background-color: #2c3440 !important;
+    color: white !important;
+    border: none !important;
+}
+
+    .gastos-page .form-control::placeholder {
+        color: #9aa4b2;
+    }
+
+    .gastos-page .form-control:focus,
+    .gastos-page .form-select:focus {
+        background-color: #2c3440 !important;
+        color: white !important;
+        box-shadow: none;
+    }

@@ -2,92 +2,389 @@
 @model GastoViewModel
 
 @{
-    ViewData["Title"] = "Registrar Gasto a Estudiante";
+    ViewData["Title"] = "Registrar Gasto";
+    Layout = null;
 }
 
-<h2>Gestión de Estudiantes</h2>
+<!DOCTYPE html>
 
-<ul class="nav nav-tabs" id="gestionTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="gasto-tab" data-bs-toggle="tab" data-bs-target="#gasto" type="button" role="tab">Registrar Gasto</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tipo-tab" data-bs-toggle="tab" data-bs-target="#tipo" type="button" role="tab">Registrar tipo gasto</button>
-    </li>
-</ul>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Registrar Gasto</title>
 
-<div class="tab-content mt-3" id="gestionTabsContent">
-    <!-- TAB: Registrar Gasto -->
-    <div class="tab-pane fade show active" id="gasto" role="tabpanel" aria-labelledby="gasto-tab">
+    ```
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
 
-        <form asp-action="CrearGasto" method="post">
-            <div class="form-group">
-                <label asp-for="EstudianteCedula">Cédula del Estudiante</label>
-                <input asp-for="EstudianteCedula" class="form-control" />
-                <span asp-validation-for="EstudianteCedula" class="text-danger"></span>
+    <!-- CSS propio -->
+    <link href="~/css/site.css" rel="stylesheet" />
+    ```
+
+</head>
+
+<body class="admin-body">
+
+    <div class="d-flex min-vh-100">
+
+        <!-- SIDEBAR -->
+
+        <nav class="admin-sidebar">
+
+            <h4 class="sidebar-title">Wallet SICAI</h4>
+
+            <ul class="nav flex-column sidebar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <i class="fa-solid fa-house"></i> Menú Principal
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="DatosEstudiantes" asp-action="Buscar">
+                        <i class="fa-solid fa-magnifying-glass"></i> Consulta de Saldo
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="RecargarSaldo" asp-action="Recargar">
+                        <i class="fa-solid fa-wallet"></i> Recargar Saldo
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Historial" asp-action="BuscarEstudiante">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Historial Recargas Estudiante
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Reportes" asp-action="FormularioReportes">
+                        <i class="fa-solid fa-file-pdf"></i> Reportes Historial Recargas
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Gastos" asp-action="Buscar">
+                        <i class="fa-solid fa-sack-dollar"></i> Historial Gastos
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" asp-controller="Gastos" asp-action="CrearGasto">
+                        <i class="fa-solid fa-sack-dollar"></i> Crear Gastos
+                    </a>
+                </li>
+
+            </ul>
+
+            <div class="sidebar-bottom">
+                <a class="nav-link logout" asp-controller="Cuenta" asp-action="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                </a>
             </div>
 
-            <div class="form-group">
-                <label asp-for="EstudianteNombreCompleto">Nombre Completo</label>
-                <input asp-for="EstudianteNombreCompleto" class="form-control" />
-                <span asp-validation-for="EstudianteNombreCompleto" class="text-danger"></span>
+        </nav>
+
+        <!-- CONTENIDO -->
+
+        <main class="admin-main gastos-page flex-grow-1 p-5">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h2 class="text-white mb-0">
+                    Registrar Gasto a Estudiante
+                </h2>
+
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al menú
+                </a>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="TipoGastoId">Tipo de Gasto</label>
-                <select asp-for="TipoGastoId" class="form-control" id="tipoGastoSelect">
-                    <option value="">Seleccione un tipo</option>
-                    @foreach (var item in Model.TiposGasto)
-                    {
-                        <option value="@item.TipoGastoId" data-precio="@item.Precio">@item.Categoria</option>
+            <!-- TABS -->
+
+            <ul class="nav nav-tabs mb-4" id="gestionTabs" role="tablist">
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active"
+                            id="gasto-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#gasto"
+                            type="button"
+                            role="tab">
+                        Registrar Gasto
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link"
+                            id="tipo-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#tipo"
+                            type="button"
+                            role="tab">
+                        Registrar tipo gasto
+                    </button>
+                </li>
+
+            </ul>
+
+            <div class="tab-content">
+
+                <!-- TAB REGISTRAR GASTO -->
+
+                <div class="tab-pane fade show active" id="gasto" role="tabpanel">
+
+                    <div class="recarga-container text-white p-4 rounded-4 mx-auto" style="max-width:720px;">
+
+                        <form id="gastoForm" asp-action="CrearGasto" method="post">
+
+                            <h5 class="mb-3 text-primary">
+                                <i class="fa-solid fa-user-graduate me-2"></i> Datos del estudiante
+                            </h5>
+
+                            <div class="mb-3">
+                                <label asp-for="EstudianteCedula" class="form-label"></label>
+                                <input asp-for="EstudianteCedula" class="form-control text-white border-0" />
+                                <span asp-validation-for="EstudianteCedula" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="EstudianteNombreCompleto" class="form-label"></label>
+                                <input asp-for="EstudianteNombreCompleto" class="form-control text-white border-0" />
+                                <span asp-validation-for="EstudianteNombreCompleto" class="text-danger"></span>
+                            </div>
+
+                            <h5 class="mb-3 text-primary">
+                                <i class="fa-solid fa-coins me-2"></i> Detalles del gasto
+                            </h5>
+
+                            <div class="mb-3">
+                                <label asp-for="TipoGastoId" class="form-label"></label>
+
+                                <select asp-for="TipoGastoId" class="form-select text-white border-0" id="tipoGastoSelect">
+
+                                    <option value="">Seleccione un tipo</option>
+
+                                    @foreach (var item in Model.TiposGasto)
+                                    {
+
+                                        <option value="@item.TipoGastoId" data-precio="@item.Precio">
+                                            @item.Categoria
+                                        </option>
+                                    }
+
+                                </select>
+
+                                <span asp-validation-for="TipoGastoId" class="text-danger"></span>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="MontoGasto" class="form-label"></label>
+                                <input asp-for="MontoGasto" class="form-control text-white border-0" id="montoInput" readonly />
+                                <span asp-validation-for="MontoGasto" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="Descripcion" class="form-label"></label>
+                                <input asp-for="Descripcion" class="form-control text-white border-0" />
+                                <span asp-validation-for="Descripcion" class="text-danger"></span>
+                            </div>
+
+                            <div class="mt-4 d-grid gap-2">
+
+                                <button type="button"
+                                        class="btn btn-primary w-100 mb-2"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmarGastoModal">
+                                    <i class="fa-solid fa-receipt me-2"></i> Registrar gasto
+                                </button>
+
+                                <button type="button"
+                                        class="btn btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelarGastoModal">
+                                    <i class="fa-solid fa-xmark me-2"></i> Cancelar
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- TAB REGISTRAR TIPO GASTO -->
+
+                <div class="tab-pane fade" id="tipo" role="tabpanel">
+
+                    <div class="recarga-container text-white p-4 rounded-4 mx-auto" style="max-width:720px;">
+
+                        <h5 class="text-primary">
+                            <i class="fa-solid fa-tags me-2"></i> Registrar tipo gasto
+                        </h5>
+
+                        <p class="text-secondary">
+                            Aquí luego pueden agregar el formulario para registrar tipos de gasto.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- MODAL CONFIRMAR GASTO -->
+
+            <div class="modal fade" id="confirmarGastoModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+
+                    <div class="modal-content bg-dark text-white border-0 rounded-4">
+
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title text-primary">
+                                <i class="fa-solid fa-circle-check me-2"></i>
+                                Confirmar gasto
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body text-center">
+                            <p class="mb-0">
+                                ¿Está seguro que desea registrar este gasto?
+                            </p>
+                            <small class="text-secondary">
+                                Se guardará la información en el sistema.
+                            </small>
+                        </div>
+
+                        <div class="modal-footer border-0 justify-content-center gap-3">
+
+                            <button type="button"
+                                    class="btn btn-primary px-4"
+                                    onclick="confirmarGasto()">
+                                Sí, registrar
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-outline-light px-4"
+                                    data-bs-dismiss="modal">
+                                No
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- MODAL CONFIRMAR CANCELACIÓN -->
+
+            <div class="modal fade" id="cancelarGastoModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+
+                    <div class="modal-content bg-dark text-white border-0 rounded-4">
+
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title text-danger">
+                                <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                                Confirmar cancelación
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body text-center">
+                            <p class="mb-0">
+                                ¿Está seguro que desea cancelar este registro?
+                            </p>
+                            <small class="text-secondary">
+                                Se eliminarán todos los datos ingresados.
+                            </small>
+                        </div>
+
+                        <div class="modal-footer border-0 justify-content-center">
+
+                            <button type="button"
+                                    class="btn btn-danger px-4"
+                                    onclick="cancelarGasto()">
+                                Sí, cancelar
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-secondary px-4"
+                                    data-bs-dismiss="modal">
+                                No
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <script>
+
+                function confirmarGasto(){
+
+                var form = document.getElementById("gastoForm");
+
+                var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarGastoModal'));
+
+                modal.hide();
+
+                form.submit();
+
+                }
+
+                function cancelarGasto(){
+
+                document.getElementById("gastoForm").reset();
+
+                var modal = bootstrap.Modal.getInstance(document.getElementById('cancelarGastoModal'));
+
+                modal.hide();
+
+                }
+
+            </script>
+
+            @section Scripts {
+
+                @{
+                    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                }
+
+                <script>
+
+                    document.getElementById("tipoGastoSelect").addEventListener("change", function () {
+
+                    var precio = this.options[this.selectedIndex].getAttribute("data-precio");
+
+                    if(precio){
+                    document.getElementById("montoInput").value = precio;
                     }
-                </select>
-                <span asp-validation-for="TipoGastoId" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="MontoGasto">Monto</label>
-                <input asp-for="MontoGasto" class="form-control" id="montoInput" readonly />
-                <span asp-validation-for="MontoGasto" class="text-danger"></span>
-            </div>
+                    });
 
-            <div class="form-group">
-                <label asp-for="Descripcion">Descripción</label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
+                </script>
 
-            <button type="submit" class="btn btn-primary">Registrar Gasto</button>
-        </form>
-
-        </div>
-
-
-</div> 
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script>
-        document.getElementById("tipoGastoSelect").addEventListener("change", function () {
-            var precio = this.options[this.selectedIndex].getAttribute("data-precio");
-            if (precio) {
-                document.getElementById("montoInput").value = precio;
             }
-        });
-    </script>
-}
-@* 
-<script> 
-    document.getElementById("tipoGastoSelect").addEventListener("change", function () 
-{ 
-    var selectedOption = this.options[this.selectedIndex]; 
-    var precio = selectedOption.getAttribute("data-precio"); 
-    if (precio) 
-    { 
-        document.getElementById("montoInput").value = precio; 
-    } 
-}); }
-</script> *@
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

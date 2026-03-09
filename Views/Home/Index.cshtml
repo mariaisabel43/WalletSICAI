@@ -140,7 +140,29 @@
                     </a>
                 </div>
 
+               @*  <!-- CARD Historial Gastos -->
+                <div class="col-md-4">
+                    <a asp-controller="Gastos" asp-action="CrearGasto" class="text-decoration-none">
+                        <div class="card admin-card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-sack-dollar fa-2x" style="color:#2f8f8b;"></i>
+                                <h5 class="card-title mt-3">Historial de Gastos</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div> *@
 
+                <!-- CARD Historial Gastos -->
+                 <div class="col-md-4">
+                    <a asp-controller="TiposGastos" asp-action="CrearTipoGasto" class="text-decoration-none">
+                        <div class="card admin-card text-center">
+                            <div class="card-body">
+                                <i class="fa-solid fa-sack-dollar fa-2x" style="color:#2f8f8b;"></i>
+                                <h5 class="card-title mt-3">Historial de Gastos</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div> 
             </div>
         </main>
 
