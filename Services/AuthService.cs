@@ -43,7 +43,7 @@ namespace WalletSICAI.Services
             if (user == null) return false;
             // Generar nueva salt
             var newSalt = RandomNumberGenerator.GetBytes(32);
-            // Concatenar nueva contraseña con la nueva sal
+            // Concatenar nueva contraseÃ±a con la nueva sal
             var newPasswordBytes = Encoding.Unicode.GetBytes(nuevaPassword);
             var newPasswordWithSalt = newPasswordBytes.Concat(newSalt).ToArray();
             // Calcular nuevo hash
@@ -75,10 +75,10 @@ namespace WalletSICAI.Services
             return await query.ToListAsync();
         }
 
-        public async Task<List<Estudiante>> BuscarEstudiantesAsync(string buscar) 
-        { 
+        public async Task<List<Estudiante>> BuscarEstudiantesAsync(string buscar)
+        {
             return await _context.Estudiantes
-                .Where(u => u.EstudianteCedula.Contains(buscar) 
+                .Where(u => u.EstudianteCedula.Contains(buscar)
                 || u.EstudianteNombreCompleto.Contains(buscar)).ToListAsync();
         }
 
@@ -98,8 +98,8 @@ namespace WalletSICAI.Services
         public async Task<bool> RecargaAsync(Recarga recarga, string estudianteCedula, string estudianteNombreCompleto)
         {
             var estudiante = await _context.Estudiantes
-                .FirstOrDefaultAsync(e => 
-                (!string.IsNullOrEmpty(estudianteCedula) && e.EstudianteCedula == estudianteCedula) || 
+                .FirstOrDefaultAsync(e =>
+                (!string.IsNullOrEmpty(estudianteCedula) && e.EstudianteCedula == estudianteCedula) ||
                 (!string.IsNullOrEmpty(estudianteNombreCompleto) && e.EstudianteNombreCompleto == estudianteNombreCompleto));
             if (estudiante == null) return false;
             // Asociar estudiante a la recarga
@@ -139,7 +139,7 @@ namespace WalletSICAI.Services
         // Crear gasto a estudiante
         public async Task<bool> CrearGastoAsync(GastosEstudiante gasto, string estudianteCedula, string estudianteNombreCompleto)
         {
-            // Buscar estudiante por cédula o nombre
+            // Buscar estudiante por cÃ©dula o nombre
             var estudiante = await _context.Estudiantes
                 .FirstOrDefaultAsync(e =>
                     (!string.IsNullOrEmpty(estudianteCedula) && e.EstudianteCedula == estudianteCedula) ||
@@ -156,7 +156,7 @@ namespace WalletSICAI.Services
             // Asignar datos obligatorios
             gasto.EstudianteId = estudiante.EstudianteId;
             gasto.FechaGasto = DateOnly.FromDateTime(DateTime.Now);
-            gasto.MontoGasto = tipoGasto.Precio; 
+            gasto.MontoGasto = tipoGasto.Precio;
 
             // Guardar gasto
             _context.GastosEstudiantes.Add(gasto);
@@ -167,14 +167,78 @@ namespace WalletSICAI.Services
 
 
         // Crear nuevo tipo de gasto
-        public async Task<bool> CrearTipoGastoAsync(TiposGasto tipo) 
-        { 
+        public async Task<bool> CrearTipoGastoAsync(TiposGasto tipo)
+        {
             if (string.IsNullOrEmpty(tipo.Categoria) || tipo.Precio <= 0)
-                return false; 
-            _context.TiposGastos.Add(tipo); 
-            await _context.SaveChangesAsync(); 
-            return true; 
+                return false;
+            _context.TiposGastos.Add(tipo);
+            await _context.SaveChangesAsync();
+            return true;
         }
+        //nuevo------------------------------------------------
+        //public async Task<List<TiposGasto>> ObtenerTiposGastoAsync()
+        //{
+        //    return await _context.TiposGastos.ToListAsync();
+        //}
+        //public async Task<TiposGasto?> ObtenerTipoGastoPorIdAsync(int id)
+        //{
+        //    return await _context.TiposGastos.FindAsync(id);
+        //}
+        //public async Task<bool> ActualizarTipoGastoAsync(TiposGasto model)
+        //{
+        //    var existente = await _context.TiposGastos.FindAsync(model.TipoGastoId);
+        //    if (existente == null) return false;
+
+        //    existente.Categoria = model.Categoria;
+        //    existente.Precio = model.Precio;
+
+        //    _context.TiposGastos.Update(existente);
+        //    await _context.SaveChangesAsync();
+        //    return true;
+        //}
+        //public async Task<bool> EliminarTipoGastoAsync(int id)
+        //{
+        //    var categoria = await _context.TiposGastos.FindAsync(id);
+        //    if (categoria == null) return false;
+
+        //    _context.TiposGastos.Remove(categoria);
+        //    await _context.SaveChangesAsync();
+        //    return true;
+        //}
+        // Editar tipo de gasto existente
+        public async Task<bool> EditarTipoGastoAsync(TiposGasto tipo)
+        {
+            var existente = await _context.TiposGastos
+                .FirstOrDefaultAsync(t => t.TipoGastoId == tipo.TipoGastoId);
+
+            if (existente == null) return false;
+
+            // Actualizar propiedades
+            existente.Categoria = tipo.Categoria;
+            existente.Precio = tipo.Precio;
+
+            _context.TiposGastos.Update(existente);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // Eliminar tipo de gasto
+        public async Task<bool> EliminarTipoGastoAsync(int id)
+        {
+            var existente = await _context.TiposGastos
+                .FirstOrDefaultAsync(t => t.TipoGastoId == id);
+
+            if (existente == null) return false;
+
+            _context.TiposGastos.Remove(existente);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        //fin----------------------------------
+
+
+
 
     }
 }
