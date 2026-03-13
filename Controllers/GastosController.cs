@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -73,8 +73,8 @@ namespace WalletSICAI.Controllers
         }
 
         // GET: Crear Gasto
-        [HttpGet] 
-        public IActionResult CrearGasto() 
+        [HttpGet]
+        public IActionResult CrearGasto()
         {
             var model = RecargarCombos();
             return View(model);
@@ -127,25 +127,46 @@ namespace WalletSICAI.Controllers
         // Método auxiliar para recargar combos
         public GastoViewModel RecargarCombos()
         {
-            var model = new GastoViewModel
+            //var model = new GastoViewModel
+            //{
+            //    TiposGasto = _context.TiposGastos
+            //        .Select(t => new GastoViewModel.TipoGastoItem
+            //        {
+            //            TipoGastoId = t.TipoGastoId,
+            //            Categoria = t.Categoria,
+            //            Precio = t.Precio
+            //        }).ToList() ?? new List<GastoViewModel.TipoGastoItem>()
+            //};
+            //---------
+            var tipos = _context.TiposGastos.ToList() ?? new List<TiposGasto>();
+
+            var vm = new GastoViewModel
             {
-                TiposGasto = _context.TiposGastos
+                TiposGasto = tipos
                     .Select(t => new GastoViewModel.TipoGastoItem
                     {
                         TipoGastoId = t.TipoGastoId,
                         Categoria = t.Categoria,
                         Precio = t.Precio
-                    }).ToList() ?? new List<GastoViewModel.TipoGastoItem>()
-            };
+                    }).ToList(),
 
+                // 👈 Aquí inicializamos siempre TiposGastoVM
+                TiposGastoVM = new TiposGastoViewModel
+                {
+                    NuevoTipo = new TiposGasto(),
+                    Categorias = tipos
+                }
+            };
+            //----------
             ViewBag.Estudiantes = new SelectList(_context.Estudiantes, "EstudianteId", "EstudianteNombreCompleto");
 
-            return model;
+            //return model;
+            return vm;
         }
         public IActionResult Index()
         {
             var model = RecargarCombos();
-            return View(model); 
+            return View(model);
         }
 
 
