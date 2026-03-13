@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WalletSICAI.Models;
 using WalletSICAI.Models_;
-
 using WalletSICAI.Services;
+using WalletSICAI.viewModels;
 
 namespace WalletSICAI.Controllers
 {
@@ -27,44 +27,261 @@ namespace WalletSICAI.Controllers
         }
 
         // POST: Crear Tipo de Gasto
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> CrearTipoGasto(TiposGasto model)
+        //{
+        //    // Recuperar el Id del administrador desde el claim
+        //    var adminIdClaim = User.FindFirst("AdministrativoId");
+        //    if (adminIdClaim == null)
+        //    {
+        //        TempData["Error"] = "No se pudo identificar al administrador.";
+        //        return View(model);
+        //    }
+
+        //    int adminId = int.Parse(adminIdClaim.Value);
+
+        //    // Buscar el administrativo en la BD
+        //    var admin = await _authService.ObtenerAdministrativoPorIdAsync(adminId);
+        //    if (admin == null)
+        //    {
+        //        TempData["Error"] = "Administrador no encontrado.";
+        //        return View(model);
+        //    }
+
+        //    // Completar el modelo con los IDs del administrador y su institución
+        //    model.AdministrativoId = admin.AdministrativoId;
+        //    model.InstitucionId = admin.InstitucionId.Value;
+
+        //    var resultado = await _authService.CrearTipoGastoAsync(model);
+
+        //    if (resultado)
+        //    {
+        //        TempData["Exito"] = "Categoría de gasto creada con éxito.";
+        //        return RedirectToAction("Index", "Gastos");
+        //        //return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
+        //    }
+
+        //    TempData["Error"] = "No se pudo crear la categoría de gasto.";
+        //    //return View(model);
+
+
+        //    return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
+
+        //var lista = await _context.TiposGastos.ToListAsync();
+        //var vm = new TiposGastoViewModel
+        //{
+        //    NuevoTipo = model,
+        //    Categorias = lista ?? new List<TiposGasto>()
+        //};
+        //return View("CrearTipoGasto", vm);
+        //}
+        // POST: Crear Tipo de Gasto
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CrearTipoGasto(TiposGasto model)
+        public async Task<IActionResult> CrearTipoGasto(TiposGastoViewModel vm)
         {
-            // Recuperar el Id del administrador desde el claim
             var adminIdClaim = User.FindFirst("AdministrativoId");
             if (adminIdClaim == null)
             {
                 TempData["Error"] = "No se pudo identificar al administrador.";
-                return View(model);
+                return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
             }
 
             int adminId = int.Parse(adminIdClaim.Value);
 
-            // Buscar el administrativo en la BD
             var admin = await _authService.ObtenerAdministrativoPorIdAsync(adminId);
             if (admin == null)
             {
                 TempData["Error"] = "Administrador no encontrado.";
-                return View(model);
+                return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
             }
 
-            // Completar el modelo con los IDs del administrador y su institución
-            model.AdministrativoId = admin.AdministrativoId;
-            model.InstitucionId = admin.InstitucionId.Value;
+            // 👇 Extraemos el objeto real a guardar
+            var tipo = vm.NuevoTipo;
+            tipo.AdministrativoId = admin.AdministrativoId;
+            tipo.InstitucionId = admin.InstitucionId.Value;
 
-            var resultado = await _authService.CrearTipoGastoAsync(model);
+            var resultado = await _authService.CrearTipoGastoAsync(tipo);
 
             if (resultado)
             {
                 TempData["Exito"] = "Categoría de gasto creada con éxito.";
-                return RedirectToAction("model");
+                return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
             }
 
             TempData["Error"] = "No se pudo crear la categoría de gasto.";
-            return View(model);
+            return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
         }
 
-       
+        //Nurvo------------------------------------------------------------------
+        // GET: Editar Tipo de Gasto
+        // GET: Editar Tipo de Gasto
+        [HttpGet]
+        public async Task<IActionResult> EditarTipoGasto(int id)
+        {
+            var tipo = await _context.TiposGastos.FindAsync(id);
+            if (tipo == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new TiposGastoViewModel
+            {
+                NuevoTipo = tipo
+            };
+
+            return PartialView("_EditarTipoGastoModal", vm); // 👈 devuelve un partial
+        }
+
+        // POST: Editar Tipo de Gasto
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarTipoGasto(TiposGastoViewModel vm)
+        {
+            var tipo = vm.NuevoTipo;
+            var resultado = await _authService.EditarTipoGastoAsync(tipo);
+
+            if (resultado)
+            {
+                TempData["Exito"] = "Categoría actualizada con éxito.";
+                return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
+            }
+
+            TempData["Error"] = "No se pudo actualizar la categoría.";
+            return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
+        }
+
+
+        // POST: Eliminar Tipo de Gasto
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EliminarTipoGasto(int id)
+        {
+            var resultado = await _authService.EliminarTipoGastoAsync(id);
+            if (resultado)
+            {
+                TempData["Exito"] = "Categoría eliminada con éxito.";
+            }
+            else
+            {
+                TempData["Error"] = "No se pudo eliminar la categoría.";
+            }
+            return RedirectToAction("Index", "Gastos");
+        }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var lista = await _context.TiposGastos.ToListAsync();
+        //    var vm = new GastoViewModel
+        //    {
+        //        TiposGastoVM = new TiposGastoViewModel
+        //        {
+        //            NuevoTipo = new TiposGasto(),
+        //            Categorias = lista ?? new List<TiposGasto>() // 👈 nunca null
+        //        }
+        //    };
+        //    return View(vm);
+        //}
+
+
+
+
     }
 }
+
+//namespace WalletSICAI.Controllers
+//{
+//    //[Authorize(Roles = "Administrador")]
+//    public class TiposGastosController : Controller
+//    {
+//        private readonly AuthService _authService;
+//        private readonly WalletContext _context;
+
+//        public TiposGastosController(AuthService authService, WalletContext context)
+//        {
+//            _authService = authService;
+//            _context = context;
+//        }
+
+//        // GET: Crear Tipo de Gasto
+//        [HttpGet]
+//        public async Task<IActionResult> CrearTipoGasto()
+//        {
+//            ViewBag.Categorias = await _context.TiposGastos.ToListAsync();
+//            return View(new TiposGasto());
+//        }
+
+//        // POST: Crear Tipo de Gasto
+//        [HttpPost]
+//        //[ValidateAntiForgeryToken]
+//        public async Task<IActionResult> CrearTipoGasto(TiposGasto model)
+//        {
+//            // Recuperar el Id del administrador desde el claim
+//            var adminIdClaim = User.FindFirst("AdministrativoId");
+//            if (adminIdClaim == null)
+//            {
+//                TempData["Error"] = "No se pudo identificar al administrador.";
+//                return View(model);
+//            }
+
+//            int adminId = int.Parse(adminIdClaim.Value);
+
+//            // Buscar el administrativo en la BD
+//            var admin = await _authService.ObtenerAdministrativoPorIdAsync(adminId);
+//            if (admin == null)
+//            {
+//                TempData["Error"] = "Administrador no encontrado.";
+//                return View(model);
+//            }
+
+//            // Completar el modelo con los IDs del administrador y su institución
+//            model.AdministrativoId = admin.AdministrativoId;
+//            model.InstitucionId = admin.InstitucionId.Value;
+
+//            var resultado = await _authService.CrearTipoGastoAsync(model);
+
+//            if (resultado)
+//            {
+//                TempData["Exito"] = "Categoría de gasto creada con éxito.";
+//                return RedirectToAction("Index", "Gastos");
+
+//            }
+
+//            TempData["Error"] = "No se pudo crear la categoría de gasto.";
+//            return View(model);
+//        }
+//        [HttpPost]
+//        public async Task<IActionResult> Editar(TiposGasto model)
+//        {
+//            if (!ModelState.IsValid) return View(model);
+
+//            var resultado = await _authService.ActualizarTipoGastoAsync(model);
+//            if (resultado)
+//            {
+//                TempData["Exito"] = "Categoría modificada con éxito.";
+//                return RedirectToAction("Index");
+//            }
+
+//            TempData["Error"] = "No se pudo modificar la categoría.";
+//            return View(model);
+//        }
+
+//        [HttpPost, ActionName("Eliminar")]
+//        public async Task<IActionResult> EliminarConfirmado(int id)
+//        {
+//            var resultado = await _authService.EliminarTipoGastoAsync(id);
+//            if (resultado)
+//            {
+//                TempData["Exito"] = "Categoría eliminada con éxito.";
+//            }
+//            else
+//            {
+//                TempData["Error"] = "No se pudo eliminar la categoría.";
+//            }
+//            return RedirectToAction("Index");
+//        }
+
+
+//    }
+//}
