@@ -1,4 +1,4 @@
-﻿@using WalletSICAI.viewModels
+﻿﻿@using WalletSICAI.viewModels
 @model GastoViewModel
 
 @{
@@ -6,7 +6,7 @@
     Layout = null;
 }
 
-<!DOCTYPE html>
+@* <!DOCTYPE html>
 
 <html lang="es">
 <head>
@@ -24,15 +24,14 @@
     <link href="~/css/site.css" rel="stylesheet" />
     ```
 
-</head>
+</head> *@
 
 <body class="admin-body">
 
     <div class="d-flex min-vh-100">
 
         <!-- SIDEBAR -->
-
-        <nav class="admin-sidebar">
+        @* <nav class="admin-sidebar">
 
             <h4 class="sidebar-title">Wallet SICAI</h4>
 
@@ -88,7 +87,7 @@
                 </a>
             </div>
 
-        </nav>
+        </nav> *@
 
         <!-- CONTENIDO -->
 
@@ -100,9 +99,9 @@
                     Registrar Gasto a Estudiante
                 </h2>
 
-                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light">
+                @* <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light">
                     <i class="fa-solid fa-arrow-left me-2"></i> Volver al menú
-                </a>
+                </a> *@
 
             </div>
 
@@ -149,13 +148,13 @@
                             </h5>
 
                             <div class="mb-3">
-                                <label asp-for="EstudianteCedula" class="form-label"></label>
+                                <label asp-for="EstudianteCedula" class="form-label">Cédula del estudiante</label>
                                 <input asp-for="EstudianteCedula" class="form-control text-white border-0" />
                                 <span asp-validation-for="EstudianteCedula" class="text-danger"></span>
                             </div>
 
                             <div class="mb-4">
-                                <label asp-for="EstudianteNombreCompleto" class="form-label"></label>
+                                <label asp-for="EstudianteNombreCompleto" class="form-label">Nombre del estudiante</label>
                                 <input asp-for="EstudianteNombreCompleto" class="form-control text-white border-0" />
                                 <span asp-validation-for="EstudianteNombreCompleto" class="text-danger"></span>
                             </div>
@@ -165,20 +164,20 @@
                             </h5>
 
                             <div class="mb-3">
-                                <label asp-for="TipoGastoId" class="form-label"></label>
-
+                                <label asp-for="TipoGastoId" class="form-label">Gasto</label>
                                 <select asp-for="TipoGastoId" class="form-select text-white border-0" id="tipoGastoSelect">
-
                                     <option value="">Seleccione un tipo</option>
-
-                                    @foreach (var item in Model.TiposGasto)
+                                    @if (Model.TiposGasto != null && Model.TiposGasto.Any())
                                     {
-
-                                        <option value="@item.TipoGastoId" data-precio="@item.Precio">
-                                            @item.Categoria
-                                        </option>
+                                        foreach (var item in Model.TiposGasto)
+                                        {
+                                            <option value="@item.TipoGastoId" data-precio="@item.Precio">@item.Categoria</option>
+                                        }
                                     }
-
+                                    else
+                                    {
+                                        <option disabled>No hay categorías disponibles</option>
+                                    }
                                 </select>
 
                                 <span asp-validation-for="TipoGastoId" class="text-danger"></span>
@@ -186,13 +185,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="MontoGasto" class="form-label"></label>
+                                <label asp-for="MontoGasto" class="form-label">Monto del gasto</label>
                                 <input asp-for="MontoGasto" class="form-control text-white border-0" id="montoInput" readonly />
                                 <span asp-validation-for="MontoGasto" class="text-danger"></span>
                             </div>
 
                             <div class="mb-4">
-                                <label asp-for="Descripcion" class="form-label"></label>
+                                <label asp-for="Descripcion" class="form-label">Descripción</label>
                                 <input asp-for="Descripcion" class="form-control text-white border-0" />
                                 <span asp-validation-for="Descripcion" class="text-danger"></span>
                             </div>
@@ -221,7 +220,7 @@
 
                 </div>
 
-                <!-- TAB REGISTRAR TIPO GASTO -->
+                @*  <!-- TAB REGISTRAR TIPO GASTO -->
 
                 <div class="tab-pane fade" id="tipo" role="tabpanel">
 
@@ -237,7 +236,7 @@
 
                     </div>
 
-                </div>
+                </div> *@
 
             </div>
 
@@ -357,27 +356,19 @@
 
             </script>
 
-            @section Scripts {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var select = document.getElementById("tipoGastoSelect");
+                    var montoInput = document.getElementById("montoInput");
 
-                @{
-                    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-                }
-
-                <script>
-
-                    document.getElementById("tipoGastoSelect").addEventListener("change", function () {
-
-                    var precio = this.options[this.selectedIndex].getAttribute("data-precio");
-
-                    if(precio){
-                    document.getElementById("montoInput").value = precio;
+                    if (select) {
+                        select.addEventListener("change", function () {
+                            var precio = this.options[this.selectedIndex].getAttribute("data-precio");
+                            montoInput.value = precio ? precio : "";
+                        });
                     }
-
-                    });
-
-                </script>
-
-            }
+                });
+            </script>
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
