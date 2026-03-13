@@ -1,0 +1,27 @@
+@model WalletSICAI.viewModels.TiposGastoViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">Editar Tipo de Gasto</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    <form asp-controller="TiposGastos" asp-action="EditarTipoGasto" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="NuevoTipo.TipoGastoId" />
+
+        <div class="mb-3">
+            <label asp-for="NuevoTipo.Categoria" class="form-label">Nombre</label>
+            <input asp-for="NuevoTipo.Categoria" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="NuevoTipo.Precio" class="form-label">Precio</label>
+            <input asp-for="NuevoTipo.Precio" type="number" class="form-control" />
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+    </form>
+</div>
