@@ -1,4 +1,4 @@
-using WalletSICAI.Models_;
+﻿using WalletSICAI.Models_;
 
 namespace WalletSICAI.viewModels
 {

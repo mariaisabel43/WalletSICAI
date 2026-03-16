@@ -1,13 +1,14 @@
 ﻿@using WalletSICAI.viewModels
 @model GastoViewModel
+
 @{
     ViewData["Title"] = "Gestión de Gastos y Categorías";
+    Layout = null;
 }
+
 @{
     var activeTab = Context.Request.Query["tab"].ToString();
 }
-
-<h2>Gestión de Estudiantes y Categorías</h2>
 
 <!DOCTYPE html>
 
@@ -16,7 +17,6 @@
     <meta charset="utf-8" />
     <title>Registrar Gasto</title>
 
-    ```
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -25,9 +25,10 @@
 
     <!-- CSS propio -->
     <link href="~/css/site.css" rel="stylesheet" />
-    ```
+    
 
 </head>
+
 <body class="admin-body">
 
     <div class="d-flex min-vh-100">
@@ -91,18 +92,17 @@
             </div>
 
         </nav>
+
         <!-- CONTENIDO -->
 
         <main class="admin-main gastos-page flex-grow-1 p-5">
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
 
-                <h2 class="text-white mb-0">
-                    Registrar Gasto a Estudiante
-                </h2>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-white mb-4">Gestión de Gastos de Estudiantes y Categorías</h2>
 
                 <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Volver al menú
+                    Volver al menú
                 </a>
 
             </div>
@@ -110,56 +110,78 @@
             <!-- TABS -->
 
             <ul class="nav nav-tabs" id="gestionTabs" role="tablist">
+
                 <li class="nav-item" role="presentation">
                     <button class="nav-link @(activeTab == "gasto" || string.IsNullOrEmpty(activeTab) ? "active" : "")"
-                            id="gasto-tab" data-bs-toggle="tab" data-bs-target="#gasto" type="button" role="tab">
+                            id="gasto-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#gasto"
+                            type="button"
+                            role="tab">
                         Registrar Gasto
                     </button>
                 </li>
+
                 <li class="nav-item" role="presentation">
                     <button class="nav-link @(activeTab == "tipo" ? "active" : "")"
-                            id="tipo-tab" data-bs-toggle="tab" data-bs-target="#tipo" type="button" role="tab">
+                            id="tipo-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#tipo"
+                            type="button"
+                            role="tab">
                         Registrar Tipo de Gasto
                     </button>
                 </li>
+
             </ul>
 
             <div class="tab-content mt-3" id="gestionTabsContent">
+
                 <div class="tab-pane fade @(activeTab == "gasto" || string.IsNullOrEmpty(activeTab) ? "show active" : "")"
-                     id="gasto" role="tabpanel" aria-labelledby="gasto-tab">
+                     id="gasto"
+                     role="tabpanel"
+                     aria-labelledby="gasto-tab">
+
                     @await Html.PartialAsync("~/Views/Gastos/CrearGasto.cshtml", Model)
+
                 </div>
 
                 <div class="tab-pane fade @(activeTab == "tipo" ? "show active" : "")"
-                     id="tipo" role="tabpanel" aria-labelledby="tipo-tab">
+                     id="tipo"
+                     role="tabpanel"
+                     aria-labelledby="tipo-tab">
+
                     @await Html.PartialAsync("~/Views/TiposGastos/CrearTipoGasto.cshtml", Model.TiposGastoVM)
+
                 </div>
+
             </div>
+
             @*  <ul class="nav nav-tabs" id="gestionTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="gasto-tab" data-bs-toggle="tab" data-bs-target="#gasto" type="button" role="tab">
-                        Registrar Gasto
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="tipo-tab" data-bs-toggle="tab" data-bs-target="#tipo" type="button" role="tab">
-                        Registrar Tipo de Gasto
-                    </button>
-                </li>
-            </ul>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="gasto-tab" data-bs-toggle="tab" data-bs-target="#gasto" type="button" role="tab">
+                Registrar Gasto
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tipo-tab" data-bs-toggle="tab" data-bs-target="#tipo" type="button" role="tab">
+                Registrar Tipo de Gasto
+            </button>
+        </li>
+    </ul>
 
-            <div class="tab-content mt-3" id="gestionTabsContent">
-                <!-- TAB: Registrar Gasto -->
-                <div class="tab-pane fade show active" id="gasto" role="tabpanel" aria-labelledby="gasto-tab">
-                    @await Html.PartialAsync("~/Views/Gastos/CrearGasto.cshtml", Model)
-                </div>
+    <div class="tab-content mt-3" id="gestionTabsContent">
+        <!-- TAB: Registrar Gasto -->
+        <div class="tab-pane fade show active" id="gasto" role="tabpanel" aria-labelledby="gasto-tab">
+            @await Html.PartialAsync("~/Views/Gastos/CrearGasto.cshtml", Model)
+        </div>
 
-                <!-- TAB: Registrar Tipo de Gasto -->
-                <div class="tab-pane fade" id="tipo" role="tabpanel" aria-labelledby="tipo-tab">
-                    @await Html.PartialAsync("~/Views/TiposGastos/CrearTipoGasto.cshtml", Model.TiposGastoVM)
+        <!-- TAB: Registrar Tipo de Gasto -->
+        <div class="tab-pane fade" id="tipo" role="tabpanel" aria-labelledby="tipo-tab">
+            @await Html.PartialAsync("~/Views/TiposGastos/CrearTipoGasto.cshtml", Model.TiposGastoVM)
+        </div>
+    </div> *@
 
-                </div>
-            </div> *@
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
         </main>
@@ -169,3 +191,4 @@
 </body>
 
 </html>
+
