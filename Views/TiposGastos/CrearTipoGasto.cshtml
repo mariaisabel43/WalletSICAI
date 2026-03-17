@@ -7,10 +7,56 @@
 
 <div class="container mt-5">
 
+    @if (TempData["Exito"] != null)
+    {
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+            <div id="toastExito" class="toast align-items-center text-bg-success border-0 show" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        @TempData["Exito"]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+                setTimeout(function () {
+                    var toast = document.getElementById('toastExito');
+                        if (toast) {
+                            toast.classList.remove('show');
+                        }
+                }, 3000);
+        </script>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+            <div id="toastError" class="toast align-items-center text-bg-danger border-0 show" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-xmark me-2"></i>
+                        @TempData["Error"]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+                setTimeout(function () {
+                   var toast = document.getElementById('toastError');
+                       if (toast) {
+                           toast.classList.remove('show');
+                       }
+                }, 3000);
+        </script>
+    }
+
     <!-- Formulario de creación -->
     <h2 class="text-white mb-4">Registrar Tipo de Gasto</h2>
     <div class="recarga-container text-white p-4 rounded-4 mx-auto" style="max-width:600px;">
-        <form asp-controller="TiposGastos" asp-action="CrearTipoGasto" method="post">
+        <form id="tipoGastoForm" asp-controller="TiposGastos" asp-action="CrearTipoGasto" method="post">
             @Html.AntiForgeryToken()
 
             <div class="mb-3">
@@ -26,17 +72,113 @@
             </div>
 
             <div class="mt-4 d-grid gap-2">
-                <input type="submit" value="Registrar Tipo de Gasto" class="btn btn-success" />
+
+                <button type="button"
+                        class="btn btn-primary w-100 mb-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#confirmarTipoGastoModal">
+                    <i class="fa-solid fa-receipt me-2"></i> Registrar Tipo de Gasto
+                </button>
 
                 <button type="button"
                         class="btn btn-danger"
                         data-bs-toggle="modal"
-                        data-bs-target="#cancelarGastoModal">
+                        data-bs-target="#cancelarTipoGastoModal">
                     <i class="fa-solid fa-xmark me-2"></i> Cancelar
                 </button>
+
             </div>
         </form>
     </div>
+
+    <!-- Modal de confirmar -->
+    <div class="modal fade" id="confirmarTipoGastoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white border-0 rounded-4">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-primary">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        Confirmar registro
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p class="mb-0">¿Desea registrar este tipo de gasto?</p>
+                    <small class="text-secondary">Se guardará en el sistema.</small>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center gap-3">
+                    <button type="button" class="btn btn-primary px-4" onclick="confirmarTipoGasto()">
+                        Sí, registrar
+                    </button>
+
+                    <button type="button" class="btn btn-outline-light px-4" data-bs-dismiss="modal">
+                        No
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de cancelar -->
+    <div class="modal fade" id="cancelarTipoGastoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white border-0 rounded-4">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-danger">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        Confirmar cancelación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p class="mb-0">¿Desea cancelar el registro?</p>
+                    <small class="text-secondary">Se perderán los datos ingresados.</small>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center">
+
+                    <button type="button"
+                            class="btn btn-danger px-4"
+                            data-bs-dismiss="modal"
+                            onclick="cancelarTipoGasto()">
+                        Sí, cancelar
+                    </button>
+
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        No
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Confirmar y Cancelar -->
+    <script>
+            function confirmarTipoGasto() {
+
+                var form = document.getElementById("tipoGastoForm");
+
+                var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarTipoGastoModal'));
+                modal.hide();
+
+                form.submit();
+            }
+
+            function cancelarTipoGasto() {
+
+             document.getElementById("tipoGastoForm").reset();
+            
+            }
+    </script>
+
 
     <!-- Listado de categorías -->
     <h2 class="text-white mt-5 mb-4">Categorías existentes</h2>

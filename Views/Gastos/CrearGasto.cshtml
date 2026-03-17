@@ -228,6 +228,7 @@
 
                             <button type="button"
                                     class="btn btn-danger px-4"
+                                    data-bs-dismiss="modal"
                                     onclick="cancelarGasto()">
                                 Sí, cancelar
                             </button>
@@ -254,22 +255,23 @@
 
         function confirmarGasto() {
 
-        var form = document.getElementById("gastoForm");
+            var form = document.getElementById("gastoForm");
 
-        var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarGastoModal'));
-        modal.hide();
+            var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarGastoModal'));
+            modal.hide();
 
-        form.submit();
+            form.submit();
         }
 
         function cancelarGasto() {
 
         document.getElementById("gastoForm").reset();
 
-        var modal = bootstrap.Modal.getInstance(document.getElementById('cancelarGastoModal'));
-        modal.hide();
         }
 
+
+
+         // Para el precio 
         document.getElementById("tipoGastoSelect").addEventListener("change", function () {
 
         var precio = this.options[this.selectedIndex].getAttribute("data-precio");
