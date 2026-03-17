@@ -74,11 +74,42 @@ namespace WalletSICAI.Controllers
 
         // GET: Crear Gasto
         [HttpGet]
-        public IActionResult CrearGasto()
+
+        [HttpGet]
+        public async Task<IActionResult> CrearGasto(string? cedula, string? nombre)
         {
-            var model = RecargarCombos();
-            return View(model);
+            var vm = new GastoViewModel();
+
+            if (!string.IsNullOrEmpty(cedula))
+            {
+                // Datos si vienen del modal
+                var estudiante = await _authService.ObtenerEstudiantePorCedula(cedula);
+                if (estudiante != null)
+                {
+                    vm.EstudianteCedula = estudiante.EstudianteCedula;
+                    vm.EstudianteNombreCompleto = estudiante.EstudianteNombreCompleto;
+                }
+                else
+                {
+                    TempData["Error"] = "Estudiante no encontrado.";
+                }
+            }
+            else
+            {
+                // Crear gasto desde cero
+                vm.EstudianteCedula = string.Empty;
+                vm.EstudianteNombreCompleto = string.Empty;
+            }
+
+            // 👇 Aquí llamamos a RecargarCombos SIN argumentos
+            vm = RecargarCombos(vm);
+
+            ViewBag.Exito = TempData["Exito"];
+            ViewBag.Error = TempData["Error"];
+
+            return View(vm);
         }
+
         // POST: Crear Gasto
         [HttpPost]
         public async Task<IActionResult> CrearGasto(GastoViewModel model)
@@ -87,23 +118,32 @@ namespace WalletSICAI.Controllers
             if (string.IsNullOrEmpty(administrativoIdClaim))
             {
                 TempData["Error"] = "No se pudo identificar al administrador.";
-                model = RecargarCombos();
                 return View("CrearGasto", model);
             }
 
             int adminId = int.Parse(administrativoIdClaim);
             var admin = await _authService.ObtenerAdministrativoPorIdAsync(adminId);
-            if (admin == null)
+            var estudiante = await _authService.ObtenerEstudiantePorCedula(model.EstudianteCedula);
+
+            if (admin == null || estudiante == null)
             {
-                TempData["Error"] = "Administrador no encontrado.";
-                model = RecargarCombos();
+                TempData["Error"] = "No se pudo registrar el gasto. Administrador o estudiante no encontrado.";
+                return View("CrearGasto", model);
+            }
+
+            if (admin.InstitucionId != estudiante.InstitucionId)
+            {
+                TempData["Error"] = "No puede registrar gastos a estudiantes de otra institución.";
                 return View("CrearGasto", model);
             }
 
             var gasto = new GastosEstudiante
             {
+                EstudianteId = estudiante.EstudianteId,
+                TipoGastoId = model.TipoGastoId,
                 Descripcion = model.Descripcion,
-                TipoGastoId = model.TipoGastoId
+                FechaGasto = DateOnly.FromDateTime(DateTime.Now),
+                MontoGasto = model.MontoGasto
             };
 
             var resultado = await _authService.CrearGastoAsync(
@@ -114,30 +154,18 @@ namespace WalletSICAI.Controllers
 
             if (!resultado)
             {
-                TempData["Error"] = "No se pudo registrar el gasto. Estudiante o tipo de gasto inválido.";
-                model = RecargarCombos();
+                TempData["Error"] = "No se pudo registrar el gasto.";
                 return View("CrearGasto", model);
             }
 
             TempData["Exito"] = "Gasto registrado con éxito.";
-            return RedirectToAction("CrearGasto");
+            return RedirectToAction("CrearGasto", new { cedula = model.EstudianteCedula });
         }
 
 
-        // Método auxiliar para recargar combos
-        public GastoViewModel RecargarCombos()
+        // Versión sin parámetros: crea un modelo nuevo
+        private GastoViewModel RecargarCombos()
         {
-            //var model = new GastoViewModel
-            //{
-            //    TiposGasto = _context.TiposGastos
-            //        .Select(t => new GastoViewModel.TipoGastoItem
-            //        {
-            //            TipoGastoId = t.TipoGastoId,
-            //            Categoria = t.Categoria,
-            //            Precio = t.Precio
-            //        }).ToList() ?? new List<GastoViewModel.TipoGastoItem>()
-            //};
-            //---------
             var tipos = _context.TiposGastos.ToList() ?? new List<TiposGasto>();
 
             var vm = new GastoViewModel
@@ -150,26 +178,70 @@ namespace WalletSICAI.Controllers
                         Precio = t.Precio
                     }).ToList(),
 
-                // 👈 Aquí inicializamos siempre TiposGastoVM
                 TiposGastoVM = new TiposGastoViewModel
                 {
                     NuevoTipo = new TiposGasto(),
                     Categorias = tipos
                 }
             };
-            //----------
+
             ViewBag.Estudiantes = new SelectList(_context.Estudiantes, "EstudianteId", "EstudianteNombreCompleto");
 
-            //return model;
             return vm;
         }
-        public IActionResult Index()
+
+        // Versión con parámetros: completa un modelo existente
+        private GastoViewModel RecargarCombos(GastoViewModel vm)
         {
-            var model = RecargarCombos();
-            return View(model);
+            var tipos = _context.TiposGastos.ToList() ?? new List<TiposGasto>();
+
+            vm.TiposGasto = tipos
+                .Select(t => new GastoViewModel.TipoGastoItem
+                {
+                    TipoGastoId = t.TipoGastoId,
+                    Categoria = t.Categoria,
+                    Precio = t.Precio
+                }).ToList();
+
+            vm.TiposGastoVM = new TiposGastoViewModel
+            {
+                NuevoTipo = new TiposGasto(),
+                Categorias = tipos
+            };
+
+            ViewBag.Estudiantes = new SelectList(_context.Estudiantes, "EstudianteId", "EstudianteNombreCompleto");
+
+            return vm;
         }
 
+        //public IActionResult Index()
+        //{
+        //    var model = RecargarCombos();
+        //    return View(model);
+        //}
 
+        public async Task<IActionResult> Index(string? cedula)
+        {
+            var vm = new GastoViewModel();
 
+            if (!string.IsNullOrEmpty(cedula))
+            {
+                var estudiante = await _authService.ObtenerEstudiantePorCedula(cedula);
+                if (estudiante != null)
+                {
+                    vm.EstudianteCedula = estudiante.EstudianteCedula;
+                    vm.EstudianteNombreCompleto = estudiante.EstudianteNombreCompleto;
+                }
+                else
+                {
+                    vm.EstudianteCedula = cedula;
+                    vm.EstudianteNombreCompleto = string.Empty;
+                    TempData["Error"] = "Estudiante no encontrado.";
+                }
+            }
+
+            vm = RecargarCombos(vm);
+            return View(vm);
+        }
     }
 }

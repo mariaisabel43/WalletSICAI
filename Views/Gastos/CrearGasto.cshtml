@@ -53,12 +53,12 @@
                     </div>
 
                     <script>
-                            setTimeout(function () {
-                                var toast = document.getElementById('toastExito');
-                                    if (toast) {
-                                        toast.classList.remove('show');
-                                    }
-                            }, 3000);
+                        setTimeout(function () {
+                            var toast = document.getElementById('toastExito');
+                                if (toast) {
+                                    toast.classList.remove('show');
+                                }
+                        }, 3000);
                     </script>
                 }
 
@@ -76,33 +76,43 @@
                     </div>
 
                     <script>
-                             setTimeout(function () {
-                                var toast = document.getElementById('toastError');
-                                    if (toast) {
-                                        toast.classList.remove('show');
-                                    }
-                             }, 3000);
+                        setTimeout(function () {
+                           var toast = document.getElementById('toastError');
+                               if (toast) {
+                                   toast.classList.remove('show');
+                               }
+                        }, 3000);
                     </script>
                 }
-
-                <form id="gastoForm" asp-action="CrearGasto" method="post">
+                <form asp-action="CrearGasto" method="post" id="gastoForm" class="gasto-form">
 
                     <!-- DATOS ESTUDIANTE -->
                     <h5 class="mb-3 text-primary">
                         <i class="fa-solid fa-user-graduate me-2"></i> Datos del estudiante
                     </h5>
 
-                    <div class="mb-3">
-                        <label asp-for="EstudianteCedula" class="form-label"></label>
-                        <input asp-for="EstudianteCedula" class="form-control text-white border-0" />
-                        <span asp-validation-for="EstudianteCedula" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-4">
-                        <label asp-for="EstudianteNombreCompleto" class="form-label"></label>
-                        <input asp-for="EstudianteNombreCompleto" class="form-control text-white border-0" />
-                        <span asp-validation-for="EstudianteNombreCompleto" class="text-danger"></span>
-                    </div>
+                    @if (!string.IsNullOrEmpty(Model.EstudianteCedula))
+                    {
+                        <!-- Si vienen datos del modal, se muestran como solo lectura -->
+                        <p><strong>Cédula:</strong> @Model.EstudianteCedula</p>
+                        <p><strong>Nombre:</strong> @Model.EstudianteNombreCompleto</p>
+                        <input type="hidden" asp-for="EstudianteCedula" />
+                        <input type="hidden" asp-for="EstudianteNombreCompleto" />
+                    }
+                    else
+                    {
+                        <!-- Si no vienen datos, el usuario debe llenarlos -->
+                        <div class="mb-3">
+                            <label>Cédula del estudiante</label>
+                            <input asp-for="EstudianteCedula" class="form-control text-white border-0"
+                                   placeholder="Ej: 1-2345-6789" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Nombre completo del estudiante</label>
+                            <input asp-for="EstudianteNombreCompleto" class="form-control text-white border-0"
+                                   placeholder="Ej: Juan Pérez" required />
+                        </div>
+                    }
 
                     <!-- DATOS GASTO -->
                     <h5 class="mb-3 text-primary">
@@ -110,7 +120,7 @@
                     </h5>
 
                     <div class="mb-3">
-                        <label asp-for="TipoGastoId" class="form-label"></label>
+                        <label asp-for="TipoGastoId" class="form-label">Categoría de gasto</label>
                         <select asp-for="TipoGastoId" class="form-select text-white border-0" id="tipoGastoSelect">
                             <option value="">Seleccione un tipo</option>
 
@@ -126,13 +136,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="MontoGasto" class="form-label"></label>
+                        <label asp-for="MontoGasto" class="form-label">Monto</label>
                         <input asp-for="MontoGasto" class="form-control text-white border-0" id="montoInput" readonly />
                         <span asp-validation-for="MontoGasto" class="text-danger"></span>
                     </div>
 
                     <div class="mb-4">
-                        <label asp-for="Descripcion" class="form-label"></label>
+                        <label asp-for="Descripcion" class="form-label">Descripción</label>
                         <input asp-for="Descripcion" class="form-control text-white border-0" />
                         <span asp-validation-for="Descripcion" class="text-danger"></span>
                     </div>
@@ -227,7 +237,7 @@
                         <div class="modal-footer border-0 justify-content-center">
 
                             <button type="button"
-                                    class="btn btn-danger px-4"
+                                    class="btn btn-danger px-4" 
                                     data-bs-dismiss="modal"
                                     onclick="cancelarGasto()">
                                 Sí, cancelar
@@ -255,23 +265,23 @@
 
         function confirmarGasto() {
 
-            var form = document.getElementById("gastoForm");
+        var form = document.getElementById("gastoForm");
 
-            var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarGastoModal'));
-            modal.hide();
+        var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarGastoModal'));
+        modal.hide();
 
-            form.submit();
+        form.submit();
         }
 
         function cancelarGasto() {
 
         document.getElementById("gastoForm").reset();
 
+        var modal = bootstrap.Modal.getInstance(document.getElementById('cancelarGastoModal'));
+        modal.hide();
         }
 
-
-
-         // Para el precio 
+        // Para el precio
         document.getElementById("tipoGastoSelect").addEventListener("change", function () {
 
         var precio = this.options[this.selectedIndex].getAttribute("data-precio");

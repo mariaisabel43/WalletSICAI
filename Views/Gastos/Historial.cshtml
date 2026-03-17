@@ -1,4 +1,4 @@
-﻿@model WalletSICAI.Models.Estudiante
+﻿       @model WalletSICAI.Models.Estudiante
 
 @{
     ViewData["Title"] = "Historial de Gastos";
@@ -108,6 +108,7 @@
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
+                                    <th>Categoría</th>
                                     <th>Descripción</th>
                                     <th>Monto</th>
                                 </tr>
@@ -117,6 +118,7 @@
                                 {
                                     <tr>
                                         <td>@gasto.FechaGasto</td>
+                                        <td>@gasto.TipoGastos?.Categoria</td>
                                         <td>@gasto.Descripcion</td>
                                         <td>@gasto.MontoGasto</td>
                                     </tr>

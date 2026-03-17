@@ -172,7 +172,12 @@
                             <a id="btnRecargar" class="btn btn-secondary"> 
                                 <i class="fa-solid fa-wallet me-2"></i> Recargar 
                              </a>
-                            
+
+                            <a id="btnCrearGasto" class="btn btn-secondary">
+                                <i class="fa-solid fa-wallet me-2"></i> Crear Gasto
+                            </a>
+
+
 
                             <!-- BOTÓN CERRAR -->
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -204,6 +209,10 @@
                     const recargarBtn = document.getElementById('btnRecargar');
                     recargarBtn.href = `/RecargarSaldo/Recargar?cedula=${cedula}`;
 
+                    const gastoBtn = document.getElementById('btnCrearGasto');
+                    gastoBtn.href = `/Gastos/Index?cedula=${cedula}&tab=gasto`;
+
+
                     // Mostrar el modal
                     new bootstrap.Modal(document.getElementById('estudianteModal')).show();
                 });
@@ -212,4 +221,3 @@
 
 </body>
 </html>
-

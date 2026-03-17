@@ -4,13 +4,13 @@ using WalletSICAI.Services;
 
 namespace WalletSICAI.Controllers
 {
-   
+
     public class DatosEstudiantesController : Controller
     {
         private readonly AuthService _authService;
-        public DatosEstudiantesController(AuthService authService) 
-        { 
-            _authService = authService; 
+        public DatosEstudiantesController(AuthService authService)
+        {
+            _authService = authService;
         }
         [HttpGet]
         [HttpPost]

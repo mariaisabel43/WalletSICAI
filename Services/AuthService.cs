@@ -131,9 +131,9 @@ namespace WalletSICAI.Services
         {
             return await _context.Estudiantes
                 .Include(e => e.GastosEstudiantes)
+                    .ThenInclude(g => g.TipoGastos)
                 .FirstOrDefaultAsync(e => e.EstudianteId == estudianteId
                                           && e.InstitucionId == adminId);
-
         }
 
         // Crear gasto a estudiante
@@ -175,36 +175,7 @@ namespace WalletSICAI.Services
             await _context.SaveChangesAsync();
             return true;
         }
-        //nuevo------------------------------------------------
-        //public async Task<List<TiposGasto>> ObtenerTiposGastoAsync()
-        //{
-        //    return await _context.TiposGastos.ToListAsync();
-        //}
-        //public async Task<TiposGasto?> ObtenerTipoGastoPorIdAsync(int id)
-        //{
-        //    return await _context.TiposGastos.FindAsync(id);
-        //}
-        //public async Task<bool> ActualizarTipoGastoAsync(TiposGasto model)
-        //{
-        //    var existente = await _context.TiposGastos.FindAsync(model.TipoGastoId);
-        //    if (existente == null) return false;
 
-        //    existente.Categoria = model.Categoria;
-        //    existente.Precio = model.Precio;
-
-        //    _context.TiposGastos.Update(existente);
-        //    await _context.SaveChangesAsync();
-        //    return true;
-        //}
-        //public async Task<bool> EliminarTipoGastoAsync(int id)
-        //{
-        //    var categoria = await _context.TiposGastos.FindAsync(id);
-        //    if (categoria == null) return false;
-
-        //    _context.TiposGastos.Remove(categoria);
-        //    await _context.SaveChangesAsync();
-        //    return true;
-        //}
         // Editar tipo de gasto existente
         public async Task<bool> EditarTipoGastoAsync(TiposGasto tipo)
         {
@@ -235,11 +206,8 @@ namespace WalletSICAI.Services
             return true;
         }
 
-        //fin----------------------------------
-
 
 
 
     }
 }
-
