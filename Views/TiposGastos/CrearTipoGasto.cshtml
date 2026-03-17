@@ -57,7 +57,7 @@
     <!-- Formulario de creación -->
     <h2 class="text-white mb-4">Registrar Tipo de Gasto</h2>
     <div class="recarga-container text-white p-4 rounded-4 mx-auto" style="max-width:600px;">
-        <form asp-controller="TiposGastos" asp-action="CrearTipoGasto" method="post">
+        <form id="tipoGastoForm" asp-controller="TiposGastos" asp-action="CrearTipoGasto" method="post">
             @Html.AntiForgeryToken()
 
             <div class="mb-3">
@@ -205,9 +205,17 @@
 
 
 
-                        <form asp-controller="TiposGastos" asp-action="EliminarTipoGasto" asp-route-id="@item.TipoGastoId" method="post" class="d-inline">
+                        @* <form asp-controller="TiposGastos" asp-action="EliminarTipoGasto" asp-route-id="@item.TipoGastoId" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
+                                <i class="fa fa-trash"></i> Eliminar
+                            </button>
+                        </form> *@
+                        <form asp-controller="TiposGastos" asp-action="EliminarTipoGasto" asp-route-id="@item.TipoGastoId" method="post" class="d-inline form-eliminar">
+                            @Html.AntiForgeryToken()
+                            <button type="button"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="abrirModalEliminar(this)">
                                 <i class="fa fa-trash"></i> Eliminar
                             </button>
                         </form>
@@ -225,6 +233,50 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Confirmaciòn Eliminar -->
+<div class="modal fade" id="eliminarTipoGastoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white border-0 rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-success w-100 text-center">
+                    <i class="fa-solid fa-circle-check me-2"></i>
+                    Confirmar eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="mb-0">
+                    ¿Está seguro que desea eliminar esta categoría?
+                </p>
+                <small class="text-secondary">
+                    Esta acción no se puede deshacer.
+                </small>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center">
+
+                <button type="button"
+                        class="btn btn-success px-4"
+                        onclick="confirmarEliminar()">
+                    Sí, eliminar
+                </button>
+
+                <button type="button"
+                        class="btn btn-secondary px-4"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scrip Modal Editar -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const modal = document.getElementById('editarTipoModal');
@@ -243,4 +295,25 @@
                 });
         });
     });
+</script>
+
+<!-- Script Modal Eliminar-->
+<script>
+    let formAEliminar = null;
+
+    function abrirModalEliminar(boton) {
+
+        // agarrar el form del botón clickeado
+        formAEliminar = boton.closest("form");
+
+        var modal = new bootstrap.Modal(document.getElementById('eliminarTipoGastoModal'));
+        modal.show();
+    }
+
+    function confirmarEliminar() {
+
+        if (formAEliminar) {
+            formAEliminar.submit();
+        }
+    }
 </script>
