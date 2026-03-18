@@ -16,9 +16,17 @@ builder.Services.AddDbContext<WalletContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("cadenaSQL")));
 
 builder.Services.AddAuthentication("MiCookieAuth").AddCookie("MiCookieAuth", options => { 
-    options.LoginPath = "/Cuenta/Login"; 
-    options.LogoutPath = "/Cuenta/Logout";
+    //options.LoginPath = "/Cuenta/Login"; 
+    options.LogoutPath = "/Home/Logout";
 });
+builder.Services.AddIdentity<Administrador, Rol>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.SignIn.RequireConfirmedEmail = true; // recomendable
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.AddAuthorization();
 

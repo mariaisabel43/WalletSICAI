@@ -48,7 +48,7 @@ namespace WalletSICAI.Controllers
                 return RedirectToAction("Index", "Gastos", new { tab = "tipo" });
             }
 
-            // 👇 Extraemos el objeto real a guardar
+            // Extraemos el objeto real a guardar
             var tipo = vm.NuevoTipo;
             tipo.AdministrativoId = admin.AdministrativoId;
             tipo.InstitucionId = admin.InstitucionId.Value;

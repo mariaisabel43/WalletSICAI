@@ -61,9 +61,12 @@ namespace WalletSICAI.Controllers
             return Ok("Contraseña actualizada exitosamente");
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return RedirectToAction("Index", "Home");
+            // Cierra la sesión y elimina la cookie de autenticación
+            await HttpContext.SignOutAsync("MiCookieAuth");
+
+            return RedirectToAction("Login", "Cuenta");
         }
     }
 }

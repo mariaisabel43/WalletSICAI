@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using WalletSICAI.Models;
 using WalletSICAI.Services;
 
@@ -65,5 +67,6 @@ namespace WalletSICAI.Controllers
 
             return View(historial);
         }
+
     }
 }

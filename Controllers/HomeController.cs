@@ -1,5 +1,7 @@
-using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using WalletSICAI.Models;
 
 namespace WalletSICAI.Controllers
@@ -22,9 +24,7 @@ namespace WalletSICAI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Logout()
-        {
-            return RedirectToAction("Index", "Home");
-        }
+        
+
     }
 }

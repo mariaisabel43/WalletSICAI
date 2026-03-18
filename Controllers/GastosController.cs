@@ -118,7 +118,8 @@ namespace WalletSICAI.Controllers
             if (string.IsNullOrEmpty(administrativoIdClaim))
             {
                 TempData["Error"] = "No se pudo identificar al administrador.";
-                return View("CrearGasto", model);
+                //return View("CrearGasto", model);
+                return RedirectToAction("Index", "Gastos", new { tab = "gasto" });
             }
 
             int adminId = int.Parse(administrativoIdClaim);
@@ -128,13 +129,17 @@ namespace WalletSICAI.Controllers
             if (admin == null || estudiante == null)
             {
                 TempData["Error"] = "No se pudo registrar el gasto. Administrador o estudiante no encontrado.";
-                return View("CrearGasto", model);
+                //return View("CrearGasto", model);
+                return RedirectToAction("Index", "Gastos", new { tab = "gasto" });
+
             }
 
             if (admin.InstitucionId != estudiante.InstitucionId)
             {
                 TempData["Error"] = "No puede registrar gastos a estudiantes de otra institución.";
-                return View("CrearGasto", model);
+                //return View("CrearGasto", model);
+                return RedirectToAction("Index", "Gastos", new { tab = "gasto" });
+
             }
 
             var gasto = new GastosEstudiante
@@ -155,11 +160,15 @@ namespace WalletSICAI.Controllers
             if (!resultado)
             {
                 TempData["Error"] = "No se pudo registrar el gasto.";
-                return View("CrearGasto", model);
+                //return View("CrearGasto", model);
+                return RedirectToAction("Index", "Gastos", new { tab = "gasto" });
+
             }
 
             TempData["Exito"] = "Gasto registrado con éxito.";
-            return RedirectToAction("CrearGasto", new { cedula = model.EstudianteCedula });
+            //return RedirectToAction("CrearGasto", new { cedula = model.EstudianteCedula });
+            return RedirectToAction("Index", "Gastos", new { tab = "gasto" });
+
         }
 
 
