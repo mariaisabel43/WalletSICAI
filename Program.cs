@@ -19,20 +19,15 @@ builder.Services.AddAuthentication("MiCookieAuth").AddCookie("MiCookieAuth", opt
     //options.LoginPath = "/Cuenta/Login"; 
     options.LogoutPath = "/Home/Logout";
 });
-builder.Services.AddIdentity<Administrador, Rol>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 6;
-    options.SignIn.RequireConfirmedEmail = true; // recomendable
-})
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+
 
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddScoped<ReportService>();
+
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 

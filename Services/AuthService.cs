@@ -35,27 +35,47 @@ namespace WalletSICAI.Services
 
             return null;
         }
+        //--------------FUNCIONALIDAD DE RECUPERACIÓN DE CONTRASEÑA----------------------
+        //public async Task<bool> ResetPasswordAsync(string email, string nuevaPassword)
+        //{
+        //    var user = await _context.Administrativos
+        //        .FirstOrDefaultAsync(u => u.AdministrativoEmail == email);
+        //    if (user == null) return false;
+        //    // Generar nueva salt
+        //    var newSalt = RandomNumberGenerator.GetBytes(32);
+        //    // Concatenar nueva contraseña con la nueva sal
+        //    var newPasswordBytes = Encoding.Unicode.GetBytes(nuevaPassword);
+        //    var newPasswordWithSalt = newPasswordBytes.Concat(newSalt).ToArray();
+        //    // Calcular nuevo hash
+        //    using var sha256 = SHA256.Create();
+        //    var newHash = sha256.ComputeHash(newPasswordWithSalt);
+        //    // Actualizar usuario
+        //    user.AdministrativoSalt = newSalt;
+        //    user.AdministrativoPassword = newHash;
+        //    await _context.SaveChangesAsync();
+        //    return true;
+        //}
+        //-------------------------------------------------------------------------------
 
         public async Task<bool> ResetPasswordAsync(string email, string nuevaPassword)
         {
             var user = await _context.Administrativos
                 .FirstOrDefaultAsync(u => u.AdministrativoEmail == email);
             if (user == null) return false;
-            // Generar nueva salt
+
             var newSalt = RandomNumberGenerator.GetBytes(32);
-            // Concatenar nueva contraseña con la nueva sal
             var newPasswordBytes = Encoding.Unicode.GetBytes(nuevaPassword);
             var newPasswordWithSalt = newPasswordBytes.Concat(newSalt).ToArray();
-            // Calcular nuevo hash
+
             using var sha256 = SHA256.Create();
             var newHash = sha256.ComputeHash(newPasswordWithSalt);
-            // Actualizar usuario
+
             user.AdministrativoSalt = newSalt;
             user.AdministrativoPassword = newHash;
+
             await _context.SaveChangesAsync();
             return true;
         }
-
 
         public async Task<List<Estudiante>> BuscarEstudiantesPorInstitucionAsync(string buscar, int adminId)
         {
@@ -205,8 +225,6 @@ namespace WalletSICAI.Services
             await _context.SaveChangesAsync();
             return true;
         }
-
-
 
 
     }

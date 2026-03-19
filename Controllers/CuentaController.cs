@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using WalletSICAI.Models;
+using WalletSICAI.Models_;
 using WalletSICAI.Services;
 using WalletSICAI.viewModels;
 
@@ -10,9 +13,14 @@ namespace WalletSICAI.Controllers
     public class CuentaController : Controller
     {
         private readonly AuthService _authService;
-        public CuentaController(AuthService authService) 
-        { 
-            _authService = authService; 
+        private readonly WalletContext _context;
+        private readonly EmailService _emailService;
+        public CuentaController (AuthService authService, WalletContext context, EmailService emailService)
+        {
+            _authService = authService;
+            _context = context;
+            _emailService = emailService;
+
         }
 
         //Muestra la vista de login
@@ -52,14 +60,89 @@ namespace WalletSICAI.Controllers
             }
             return View(model);
         }
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(string email, string nuevaPassword)
+        //----------------------FUNCIONALIDAD DE RECUPERACIÓN DE CONTRASEÑA----------------------
+        //[HttpPost("reset-password")]
+        //public async Task<IActionResult> ResetPassword(string email, string nuevaPassword)
+        //{
+        //    var result = await _authService.ResetPasswordAsync(email, nuevaPassword);
+        //    if (!result)
+        //        return BadRequest("No se pudo actualizar la contraseña");
+        //    return Ok("Contraseña actualizada exitosamente");
+        //}
+
+        //---------------------------------------------------------------------------------------
+        [HttpGet("reset-password-confirm")]
+        public IActionResult ResetPasswordConfirm(string token, string email)
         {
-            var result = await _authService.ResetPasswordAsync(email, nuevaPassword);
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Token o email inválido.");
+            }
+
+            var model = new ResetPasswordViewModel
+            {
+                Token = token,
+                AdministrativoEmail = email
+            };
+
+            return View(model); 
+        }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var usuario = await _context.Administrativos
+                .FirstOrDefaultAsync(u => u.AdministrativoEmail == email);
+
+            if (usuario == null)
+                return BadRequest("Usuario no encontrado");
+
+            var token = Guid.NewGuid().ToString();
+
+            var resetToken = new PasswordResetToken
+            {
+                AdministrativoId = usuario.AdministrativoId,
+                Token = token,
+                Expiration = DateTime.UtcNow.AddMinutes(30)
+            };
+
+            _context.PasswordResetTokens.Add(resetToken);
+            await _context.SaveChangesAsync();
+
+            var resetLink = Url.Action("ResetPasswordConfirm", "Cuenta",
+                new { token, email }, Request.Scheme);
+
+            await _emailService.SendEmailAsync(email, "Reset de contraseña",
+                $"Haz clic aquí para resetear tu contraseña: {resetLink}");
+
+            return Ok("Correo de reset enviado");
+        }
+
+        [HttpPost("reset-password-confirm")]
+        public async Task<IActionResult> ResetPasswordConfirm(ResetPasswordViewModel model)
+        {
+            var usuario = await _context.Administrativos
+                .FirstOrDefaultAsync(u => u.AdministrativoEmail == model.AdministrativoEmail);
+
+            if (usuario == null)
+                return BadRequest("Usuario no encontrado");
+
+            var resetToken = await _context.PasswordResetTokens
+                .FirstOrDefaultAsync(t => t.Token == model.Token && t.AdministrativoId == usuario.AdministrativoId);
+
+            if (resetToken == null || resetToken.Expiration < DateTime.UtcNow)
+                return BadRequest("Token inválido o expirado");
+
+            var result = await _authService.ResetPasswordAsync(model.AdministrativoEmail, model.nuevaPassword);
             if (!result)
                 return BadRequest("No se pudo actualizar la contraseña");
+
+            _context.PasswordResetTokens.Remove(resetToken);
+            await _context.SaveChangesAsync();
+
             return Ok("Contraseña actualizada exitosamente");
         }
+
+
 
         public async Task<IActionResult> Logout()
         {

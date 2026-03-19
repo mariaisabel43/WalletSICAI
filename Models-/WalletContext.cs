@@ -31,6 +31,7 @@ public partial class WalletContext : DbContext
     public virtual DbSet<GastosEstudiante> GastosEstudiantes { get; set; }
 
     public DbSet<TiposGasto> TiposGastos { get; set; }
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
 
 
@@ -236,6 +237,24 @@ public partial class WalletContext : DbContext
                   .WithMany(a => a.TiposGastos)
                   .HasForeignKey(e => e.AdministrativoId)
                   .HasConstraintName("FK_TipoGasto_Administrativo");
+        });
+        modelBuilder.Entity<PasswordResetToken>(entity =>
+        {
+            entity.ToTable("PasswordResetTokens"); // sin ExcludeFromMigrations
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Token)
+                  .HasMaxLength(200)
+                  .IsRequired();
+
+            entity.Property(e => e.Expiration)
+                  .IsRequired();
+
+            entity.HasOne(e => e.Administrativo)
+                  .WithMany(a => a.PasswordResetTokens)
+                  .HasForeignKey(e => e.AdministrativoId)
+                  .HasConstraintName("FK_PasswordResetToken_Administrativo");
         });
 
 

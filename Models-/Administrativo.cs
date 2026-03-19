@@ -32,4 +32,8 @@ public partial class Administrativo
 
     public ICollection<TiposGasto> TiposGastos { get; set; }
 
+    public ICollection<PasswordResetToken> PasswordResetTokens { get; set; }
 }
+
+
+

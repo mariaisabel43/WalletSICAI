@@ -9,8 +9,8 @@ namespace WalletSICAI.viewModels
         [Required(ErrorMessage = "Contraseña es requerida")]
         [DataType(DataType.Password)]
         public string AdministrativoPassword { get; set; }
-        [Display(Name ="Remember me?")]
-        public bool RememberMe { get; set; }
+        //[Display(Name ="Remember me?")]
+        //public bool RememberMe { get; set; }
 
     }
 }
