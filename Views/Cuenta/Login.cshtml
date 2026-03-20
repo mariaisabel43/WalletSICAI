@@ -318,6 +318,11 @@
                         const resetModalEl = document.getElementById('resetPasswordModal');
                         const resetInstance = bootstrap.Modal.getInstance(resetModalEl);
                         if (resetInstance) resetInstance.hide();
+
+                        // Resetear el formulario dentro del modal de recuperación
+                        const resetForm = document.getElementById('forgotPasswordForm');
+                        if (resetForm) resetForm.reset();
+
                     });
 
 
