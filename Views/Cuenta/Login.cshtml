@@ -24,6 +24,52 @@
 
 <body class="login-bg">
 
+    @if (TempData["Exito"] != null)
+    {
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+            <div id="toastExito" class="toast align-items-center text-bg-success border-0 show" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        @TempData["Exito"]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+                setTimeout(function () {
+                    var toast = document.getElementById('toastExito');
+                    if (toast) {
+                        toast.classList.remove('show');
+                    }
+                }, 3000);
+        </script>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+            <div id="toastError" class="toast align-items-center text-bg-danger border-0 show" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-xmark me-2"></i>
+                        @TempData["Error"]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+                setTimeout(function () {
+                    var toast = document.getElementById('toastError');
+                    if (toast) {
+                        toast.classList.remove('show');
+                    }
+                }, 3000);
+        </script>
+    }
+
     <div class="login-container">
         <div class="login-card">
             <h3 class="login-title">Inicio de Sesión</h3>
@@ -198,6 +244,46 @@
             </div>
         </div>
     </div> 
+
+    <!-- Modal de envio éxitoso -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content login-error-modal">
+                <div class="modal-body text-center p-4">
+                    <i class="fa-solid fa-circle-check mb-3 text-success"></i>
+                    <h5 class="text-white mb-2">Solicitud procesada</h5>
+                    <p class="mb-4">
+                        Si el correo está registrado, se enviará un enlace de reset.
+                    </p>
+                    <button type="button"
+                            class="btn btn-outline-light px-4"
+                            onclick="closeAllModals()">
+                        Entendido
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de envio error -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content login-error-modal">
+                <div class="modal-body text-center p-4">
+                    <i class="fa-solid fa-circle-xmark mb-3 text-danger"></i>
+                    <h5 class="text-white mb-2">Error</h5>
+                    <p class="mb-4">
+                        Error al procesar la solicitud. Intente nuevamente.
+                    </p>
+                    <button type="button" class="btn btn-outline-light px-4" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     
 
     <!-- JS para mostrar / ocultar contraseña -->
@@ -215,10 +301,31 @@
             });
 
             if (response.ok) {
-                alert("Si el correo está registrado, se enviará un enlace de reset.");
+                // const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                // successModal.show();
+                const successModalEl = document.getElementById('successModal');
+                const successModal = new bootstrap.Modal(successModalEl);
+                successModal.show();
+
+                // Cuando el usuario haga clic en "Entendido", cerramos ambos modales
+                successModalEl.querySelector("button[onclick='closeAllModals()']")
+                    ?.addEventListener("click", function () {
+                        // Cerrar modal de éxito
+                        const successInstance = bootstrap.Modal.getInstance(successModalEl);
+                        if (successInstance) successInstance.hide();
+
+                        // Cerrar modal de recuperación
+                        const resetModalEl = document.getElementById('resetPasswordModal');
+                        const resetInstance = bootstrap.Modal.getInstance(resetModalEl);
+                        if (resetInstance) resetInstance.hide();
+                    });
+
+
             } else {
-                alert("Error al procesar la solicitud.");
+                const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                errorModal.show();
             }
+
         });
     </script>
 

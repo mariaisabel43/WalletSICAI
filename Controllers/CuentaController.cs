@@ -124,22 +124,42 @@ namespace WalletSICAI.Controllers
                 .FirstOrDefaultAsync(u => u.AdministrativoEmail == model.AdministrativoEmail);
 
             if (usuario == null)
-                return BadRequest("Usuario no encontrado");
+            //return BadRequest("Usuario no encontrado");
+            {
+                TempData["Error"] = "Usuario no encontrado.";
+                return RedirectToAction("Login", "Cuenta");
+            }
+
 
             var resetToken = await _context.PasswordResetTokens
                 .FirstOrDefaultAsync(t => t.Token == model.Token && t.AdministrativoId == usuario.AdministrativoId);
 
             if (resetToken == null || resetToken.Expiration < DateTime.UtcNow)
-                return BadRequest("Token inválido o expirado");
+            //return BadRequest("Token inválido o expirado");
+            {
+                TempData["Error"] = "Token inválido o expirado.";
+                return RedirectToAction("Login", "Cuenta");
+            }
+
 
             var result = await _authService.ResetPasswordAsync(model.AdministrativoEmail, model.nuevaPassword);
             if (!result)
-                return BadRequest("No se pudo actualizar la contraseña");
+            //return BadRequest("No se pudo actualizar la contraseña");
+            {
+                TempData["Error"] = "No se pudo actualizar la contraseña.";
+                return RedirectToAction("Login", "Cuenta");
+            }
+
 
             _context.PasswordResetTokens.Remove(resetToken);
             await _context.SaveChangesAsync();
 
-            return Ok("Contraseña actualizada exitosamente");
+            //return Ok("Contraseña actualizada exitosamente");
+
+            TempData["Exito"] = "Tu contraseña se actualizó exitosamente. Ya puedes iniciar sesión.";
+
+            //return RedirectToAction("Login", "Cuenta", new { mensaje = "success" });
+            return RedirectToAction("Login", "Cuenta");
         }
 
 
