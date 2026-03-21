@@ -23,7 +23,7 @@ public partial class Recarga
 
     public int? MontoRecarga { get; set; }
 
-    public DateOnly? FechaRecarga { get; set; }
+    public DateTime? FechaRecarga { get; set; }
 
     public string? SolicitanteRecargaNombreCompleto { get; set; }
 
@@ -32,4 +32,6 @@ public partial class Recarga
     public virtual Estudiante? Estudiante { get; set; }
 
     public virtual ICollection<HistorialRecargaEstudiante> HistorialRecargaEstudiantes { get; set; } = new List<HistorialRecargaEstudiante>();
+    public bool EsDevuelto { get; set; } = false;
+
 }

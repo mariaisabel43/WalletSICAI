@@ -7,14 +7,18 @@ public partial class VwHistorialRecarga
 {
     public int HistorialId { get; set; }
 
-    public string EstudianteNombreCompleto { get; set; } = null!;
+    public string? EstudianteNombreCompleto { get; set; }
 
-    public string EstudianteCedula { get; set; } = null!;
+    public string? EstudianteCedula { get; set; } 
 
     public int? MontoRecarga { get; set; }
 
-    public DateOnly? FechaRecarga { get; set; }
-    public string SolicitanteRecargaNombreCompleto { get; set; } = null!;
+    public DateTime? FechaRecarga { get; set; }
+    public string? SolicitanteRecargaNombreCompleto { get; set; }
 
-    public string AdministrativoNombreCompleto { get; set; } = null!;
+    public string? AdministrativoNombreCompleto { get; set; }
+    public bool EsDevuelto { get; set; }
+    public int RecargaId { get; set; }
+
 }
+

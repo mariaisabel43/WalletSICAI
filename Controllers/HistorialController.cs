@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WalletSICAI.Models;
 using WalletSICAI.Services;
 
@@ -9,10 +10,12 @@ namespace WalletSICAI.Controllers
     public class HistorialController : Controller
     {
         private readonly AuthService _authService;
+        private readonly WalletContext _context;
 
-        public HistorialController(AuthService authService)
+        public HistorialController(AuthService authService, WalletContext context)
         {
             _authService = authService;
+            _context = context;
         }
 
         // =========================
@@ -68,5 +71,30 @@ namespace WalletSICAI.Controllers
             return View(historial);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DevolverRecarga(int id)
+        {
+            var adminIdClaim = User.FindFirst("AdministrativoId");
+            if (adminIdClaim == null) return Unauthorized();
+
+            int adminId = int.Parse(adminIdClaim.Value);
+
+            var resultado = await _authService.DevolverRecargaAsync(id, adminId);
+
+            if (!resultado.Exito)
+            {
+                TempData["Error"] = resultado.Mensaje;
+
+                // Filtrar por cédula, porque VwHistorialRecarga no tiene EstudianteId
+                var recargas = await _context.VwHistorialRecargas
+                    .Where(r => r.EstudianteCedula == resultado.Cedula)
+                    .ToListAsync();
+
+                return View("HistorialEstudiante", recargas);
+            }
+
+            TempData["Exito"] = resultado.Mensaje;
+            return RedirectToAction("HistorialEstudiante", new { cedula = resultado.Cedula });
+        }
     }
 }

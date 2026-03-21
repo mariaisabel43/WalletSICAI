@@ -71,6 +71,33 @@ namespace WalletSICAI.Controllers
 
             return View(estudiante);
         }
+        // Acción para devolver gasto
+
+        [HttpPost]
+        public async Task<IActionResult> DevolverGasto(int id)
+        {
+            var adminIdClaim = User.FindFirst("AdministrativoId");
+            if (adminIdClaim == null)
+                return Unauthorized();
+
+            int adminId = int.Parse(adminIdClaim.Value);
+
+            var estudianteId = await _authService.DevolverGastoAsync(id, adminId);
+
+            if (estudianteId == null)
+            {
+                TempData["Error"] = "No se pudo registrar la devolución.";
+                return RedirectToAction("Index", "Gastos");
+            }
+
+            TempData["Exito"] = "La devolución se registró correctamente.";
+
+            var estudiante = await _authService.ObtenerEstudianteGastosAsync(estudianteId.Value, adminId);
+            if (estudiante == null)
+                return NotFound();
+
+            return View("Historial", estudiante);
+        }
 
         // GET: Crear Gasto
         [HttpGet]
@@ -223,11 +250,6 @@ namespace WalletSICAI.Controllers
             return vm;
         }
 
-        //public IActionResult Index()
-        //{
-        //    var model = RecargarCombos();
-        //    return View(model);
-        //}
 
         public async Task<IActionResult> Index(string? cedula)
         {

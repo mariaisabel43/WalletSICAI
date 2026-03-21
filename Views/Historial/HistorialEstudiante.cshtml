@@ -99,6 +99,19 @@
 
             <!-- CARD HISTORIAL -->
             <div class="results-card">
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger text-center">
+                        @TempData["Error"]
+                    </div>
+                }
+
+                @if (TempData["Exito"] != null)
+                {
+                    <div class="alert alert-success text-center">
+                        @TempData["Exito"]
+                    </div>
+                }
 
                 @if (!Model.Any())
                 {
@@ -117,7 +130,8 @@
                                     <th>Monto</th>
                                     <th>Fecha</th>
                                     <th>Solicitante</th>
-                                    <th>Administrador</th>                                    
+                                    <th>Administrador</th>
+                                    <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,9 +143,24 @@
                                         <td class="text-success fw-semibold">
                                             ₡ @v.MontoRecarga
                                         </td>
-                                        <td>@v.FechaRecarga</td>
+                                        <td>@v.FechaRecarga?.ToString("dd/MM/yyyy")</td>
                                         <td>@v.SolicitanteRecargaNombreCompleto</td>
-                                        <td>@v.AdministrativoNombreCompleto</td>                                        
+                                        <td>@v.AdministrativoNombreCompleto</td>
+                                        <td>
+                                            @if (v.EsDevuelto)
+                                            {
+                                                <span class="badge bg-danger">DEVUELTO</span>
+                                            }
+                                            else
+                                            {
+                                                <form asp-action="DevolverRecarga" method="post" class="d-inline">
+                                                    <input type="hidden" name="id" value="@v.RecargaId" />
+                                                    <button type="submit" class="btn btn-warning btn-sm">
+                                                        <i class="fa-solid fa-rotate-left me-1"></i> Devolver
+                                                    </button>
+                                                </form>
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             </tbody>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace WalletSICAI.Models;
 
 public partial class Estudiante

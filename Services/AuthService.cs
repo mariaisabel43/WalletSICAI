@@ -35,27 +35,7 @@ namespace WalletSICAI.Services
 
             return null;
         }
-        //--------------FUNCIONALIDAD DE RECUPERACIÓN DE CONTRASEÑA----------------------
-        //public async Task<bool> ResetPasswordAsync(string email, string nuevaPassword)
-        //{
-        //    var user = await _context.Administrativos
-        //        .FirstOrDefaultAsync(u => u.AdministrativoEmail == email);
-        //    if (user == null) return false;
-        //    // Generar nueva salt
-        //    var newSalt = RandomNumberGenerator.GetBytes(32);
-        //    // Concatenar nueva contraseña con la nueva sal
-        //    var newPasswordBytes = Encoding.Unicode.GetBytes(nuevaPassword);
-        //    var newPasswordWithSalt = newPasswordBytes.Concat(newSalt).ToArray();
-        //    // Calcular nuevo hash
-        //    using var sha256 = SHA256.Create();
-        //    var newHash = sha256.ComputeHash(newPasswordWithSalt);
-        //    // Actualizar usuario
-        //    user.AdministrativoSalt = newSalt;
-        //    user.AdministrativoPassword = newHash;
-        //    await _context.SaveChangesAsync();
-        //    return true;
-        //}
-        //-------------------------------------------------------------------------------
+
 
         public async Task<bool> ResetPasswordAsync(string email, string nuevaPassword)
         {
@@ -124,7 +104,8 @@ namespace WalletSICAI.Services
             if (estudiante == null) return false;
             // Asociar estudiante a la recarga
             recarga.EstudianteId = estudiante.EstudianteId;
-            recarga.FechaRecarga = DateOnly.FromDateTime(DateTime.Now);
+            recarga.FechaRecarga = DateTime.Now.Date;
+
 
             // Guardar recarga
             _context.Recargas.Add(recarga);
@@ -132,21 +113,50 @@ namespace WalletSICAI.Services
 
             return true;
         }
-        public async Task<List<VwHistorialRecarga>> ObtenerHistorialEstudianteAsync(string cedula, string? nombreCompleto = null)
+
+        public async Task<List<VwHistorialRecarga>> ObtenerHistorialEstudianteAsync(string cedula,string? nombreCompleto = null)
         {
-            var query = _context.VwHistorialRecargas.AsQueryable();
+                var query = _context.VwHistorialRecargas.AsQueryable();
 
-            if (!string.IsNullOrEmpty(cedula))
-                query = query.Where(v => v.EstudianteCedula == cedula);
+                if (!string.IsNullOrEmpty(cedula))
+                    query = query.Where(v => v.EstudianteCedula == cedula);
 
-            if (!string.IsNullOrEmpty(nombreCompleto))
-                query = query.Where(v => v.EstudianteNombreCompleto.Contains(nombreCompleto));
+                if (!string.IsNullOrEmpty(nombreCompleto))
+                    query = query.Where(v => v.EstudianteNombreCompleto.Contains(nombreCompleto));
 
-            return await query
-                .OrderByDescending(v => v.FechaRecarga)
-                .ToListAsync();
+                return await query
+                    .OrderByDescending(v => v.FechaRecarga)
+                    .ToListAsync();
         }
 
+        public async Task<(bool Exito, string Mensaje, string Cedula)> DevolverRecargaAsync(int recargaId, int adminId)
+        {
+            var recarga = await _context.Recargas
+                .Include(r => r.Estudiante)
+                .FirstOrDefaultAsync(r => r.RecargaId == recargaId);
+
+            if (recarga == null)
+                return (false, "Recarga no encontrada.", null);
+
+            var admin = await _context.Administrativos
+                .FirstOrDefaultAsync(a => a.AdministrativoId == adminId);
+
+            if (admin == null || admin.InstitucionId != recarga.Estudiante.InstitucionId)
+                return (false, "Administrador inválido.", recarga.Estudiante.EstudianteCedula);
+
+            if (recarga.EsDevuelto)
+                return (false, "La recarga ya fue devuelta.", recarga.Estudiante.EstudianteCedula);
+
+            var limite = DateTime.Now.AddDays(-30).Date;
+            if (recarga.FechaRecarga == null || recarga.FechaRecarga.Value.Date < limite)
+                return (false, "No se puede devolver una recarga con más de 30 días de antigüedad.", recarga.Estudiante.EstudianteCedula);
+
+            recarga.EsDevuelto = true;
+            await _context.SaveChangesAsync();
+            await _context.Entry(recarga.Estudiante).ReloadAsync();
+
+            return (true, "Recarga devuelta correctamente.", recarga.Estudiante.EstudianteCedula);
+        }
         public async Task<Estudiante?> ObtenerEstudianteGastosAsync(int estudianteId, int adminId)
         {
             return await _context.Estudiantes
@@ -154,6 +164,34 @@ namespace WalletSICAI.Services
                     .ThenInclude(g => g.TipoGastos)
                 .FirstOrDefaultAsync(e => e.EstudianteId == estudianteId
                                           && e.InstitucionId == adminId);
+        }
+        //Devolucion al eliminar gasto
+        public async Task<int?> DevolverGastoAsync(int gastoId, int adminId)
+        {
+            var gasto = await _context.GastosEstudiantes
+                .Include(g => g.Estudiante)
+                .FirstOrDefaultAsync(g => g.GastoId == gastoId);
+
+            if (gasto == null) return null;
+
+            var admin = await _context.Administrativos
+                .FirstOrDefaultAsync(a => a.AdministrativoId == adminId);
+
+            if (admin == null || admin.InstitucionId != gasto.Estudiante.InstitucionId)
+                return null;
+
+            if (gasto.EsDevuelto)
+                return null; 
+
+            gasto.EsDevuelto = true;
+            //gasto.Descripcion += " DEVUELTO";
+
+            // Ajustar saldo
+            gasto.Estudiante.MontoActual = (gasto.Estudiante.MontoActual ?? 0) + gasto.MontoGasto;
+
+            await _context.SaveChangesAsync();
+
+            return gasto.EstudianteId;
         }
 
         // Crear gasto a estudiante

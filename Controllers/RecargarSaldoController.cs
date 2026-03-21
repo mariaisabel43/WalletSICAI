@@ -76,7 +76,7 @@ namespace WalletSICAI.Controllers
                 EstudianteId = model.EstudianteId, 
                 MontoRecarga = model.MontoRecarga, 
                 ModoPagoRecarga = model.ModoPagoRecarga, 
-                FechaRecarga = DateOnly.FromDateTime(DateTime.Now), 
+                FechaRecarga = DateTime.Now.Date, 
                 AdministrativoId = int.Parse(administrativoIdClaim), 
                 SolicitanteRecargaCedula = model.SolicitanteRecargaCedula, 
                 SolicitanteRecargaNombre = model.SolicitanteRecargaNombre, 

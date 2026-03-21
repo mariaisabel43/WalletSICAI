@@ -18,26 +18,29 @@ namespace WalletSICAI.Services
         {
             _context = context;
         }
-        
+
         // Método para obtener recargas filtradas
-        public async Task<List<Recarga>> ObtenerRecargas(DateTime fechaInicio, DateTime? fechaFin, string? solicitante = null) 
-       {
+        public async Task<List<Recarga>> ObtenerRecargas(DateTime fechaInicio, DateTime? fechaFin, string? solicitante = null)
+        {
             var query = _context.Recargas
-                .Include(r => r.Estudiante) // Trae el estudiante relacionado
+                .Include(r => r.Estudiante)
                 .AsQueryable();
 
             // Filtrar por fecha inicio
-            query = query.Where(r => r.FechaRecarga >= DateOnly.FromDateTime(fechaInicio)); 
+            query = query.Where(r => r.FechaRecarga >= fechaInicio.Date);
+
             // Filtrar por fecha fin si existe
-            if (fechaFin.HasValue) 
-                query = query.Where(r => r.FechaRecarga <= DateOnly.FromDateTime(fechaFin.Value)); 
+            if (fechaFin.HasValue)
+                query = query.Where(r => r.FechaRecarga <= fechaFin.Value.Date);
+
             // Filtrar por solicitante (nombre o cédula)
-            if (!string.IsNullOrEmpty(solicitante)) 
-            { 
-                query = query.Where(r => r.SolicitanteRecargaCedula == solicitante || 
-                r.SolicitanteRecargaNombreCompleto.Contains(solicitante)); 
-            } 
-            return await query.ToListAsync(); 
+            if (!string.IsNullOrEmpty(solicitante))
+            {
+                query = query.Where(r => r.SolicitanteRecargaCedula == solicitante ||
+                                         r.SolicitanteRecargaNombreCompleto.Contains(solicitante));
+            }
+
+            return await query.ToListAsync();
         }
         // Método para generar el PDF
         //public async Task<byte[]> GenerarReporteRecargas(DateTime fechaInicio, DateTime? fechaFin, string? solicitante = null) 
@@ -94,7 +97,7 @@ namespace WalletSICAI.Services
 
         //}
 
-       
+
 
         public async Task<byte[]> GenerarReporteRecargas(
     DateTime fechaInicio,

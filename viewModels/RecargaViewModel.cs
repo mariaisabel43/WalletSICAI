@@ -12,5 +12,7 @@ namespace WalletSICAI.viewModels
         public string SolicitanteRecargaNombre { get; set; }
         public string SolicitanteRecargaApellido { get; set; }
         public string SolicitanteRecargaEmail { get; set; }
+        public bool EsDevuelto { get; set; }
+
     }
 }
