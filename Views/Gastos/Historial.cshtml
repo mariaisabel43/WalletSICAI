@@ -109,6 +109,7 @@
                                     <th>Fecha</th>
                                     <th>Categoría</th>
                                     <th>Descripción</th>
+                                    <th>Estado</th>
                                     <th>Monto</th>
                                     <th>Acción</th>
                                 </tr>
@@ -119,8 +120,9 @@
                                     <tr>
                                         <td>@gasto.FechaGasto</td>
                                         <td>@gasto.TipoGastos?.Categoria</td>
+                                        <td>@gasto.Descripcion</td>
                                         <td>
-                                            @gasto.Descripcion
+                                            
                                             @if (gasto.EsDevuelto)
                                             {
                                                 <span class="badge bg-success ms-2">DEVUELTO</span>

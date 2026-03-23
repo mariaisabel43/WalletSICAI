@@ -211,6 +211,10 @@ namespace WalletSICAI.Services
 
             if (tipoGasto == null) return false;
 
+            
+            if (estudiante.MontoActual < tipoGasto.Precio) return false;
+
+
             // Asignar datos obligatorios
             gasto.EstudianteId = estudiante.EstudianteId;
             gasto.FechaGasto = DateOnly.FromDateTime(DateTime.Now);
@@ -223,6 +227,8 @@ namespace WalletSICAI.Services
             return true;
         }
 
+
+        
 
         // Crear nuevo tipo de gasto
         public async Task<bool> CrearTipoGastoAsync(TiposGasto tipo)

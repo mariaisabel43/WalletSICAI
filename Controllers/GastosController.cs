@@ -128,7 +128,6 @@ namespace WalletSICAI.Controllers
                 vm.EstudianteNombreCompleto = string.Empty;
             }
 
-            // 👇 Aquí llamamos a RecargarCombos SIN argumentos
             vm = RecargarCombos(vm);
 
             ViewBag.Exito = TempData["Exito"];
@@ -186,7 +185,7 @@ namespace WalletSICAI.Controllers
 
             if (!resultado)
             {
-                TempData["Error"] = "No se pudo registrar el gasto.";
+                TempData["Error"] = "No se pudo registrar el gasto. Verifique saldo y datos.";
                 //return View("CrearGasto", model);
                 return RedirectToAction("Index", "Gastos", new { tab = "gasto" });
 
