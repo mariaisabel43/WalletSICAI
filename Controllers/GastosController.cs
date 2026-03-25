@@ -11,7 +11,7 @@ using WalletSICAI.viewModels;
 
 namespace WalletSICAI.Controllers
 {
-    //[Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador")]
     public class GastosController : Controller
     {
         private readonly AuthService _authService;
@@ -100,7 +100,7 @@ namespace WalletSICAI.Controllers
         }
 
         // GET: Crear Gasto
-        [HttpGet]
+
 
         [HttpGet]
         public async Task<IActionResult> CrearGasto(string? cedula, string? nombre)

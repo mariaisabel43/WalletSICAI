@@ -4,10 +4,11 @@ using WalletSICAI.Models;
 using WalletSICAI.Models_;
 using WalletSICAI.Services;
 using WalletSICAI.viewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WalletSICAI.Controllers
 {
-    //[Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador")]
     public class TiposGastosController : Controller
     {
         private readonly AuthService _authService;

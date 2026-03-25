@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using WalletSICAI.Models;
 using WalletSICAI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WalletSICAI.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     [Route("Reportes")]
     public class ReportesController : Controller
     {

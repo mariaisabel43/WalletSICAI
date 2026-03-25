@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WalletSICAI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WalletSICAI.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class HomeController : Controller
     {
         public IActionResult Index()

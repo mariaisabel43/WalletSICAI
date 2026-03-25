@@ -39,11 +39,20 @@ namespace WalletSICAI.Controllers
                 var usuario = await _authService.LoginAsync(model.AdministrativoEmail, model.AdministrativoPassword);
                 if (usuario != null)
                 {
+                    //var claims = new List<Claim>
+
+
+                    //    {
+                    //        new Claim(ClaimTypes.Name, model.AdministrativoEmail),
+                    //new Claim("AdministrativoId", usuario.AdministrativoId.ToString()) 
                     var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, model.AdministrativoEmail),
-                new Claim("AdministrativoId", usuario.AdministrativoId.ToString()) 
-            };
+                    {
+                        new Claim(ClaimTypes.Name, model.AdministrativoEmail),
+                        new Claim("AdministrativoId", usuario.AdministrativoId.ToString()),
+                        new Claim(ClaimTypes.Role, "Administrador") // <- este es el que valida [Authorize]
+                    };
+                
+                
 
                     var identity = new ClaimsIdentity(claims, "MiCookieAuth");
                     var principal = new ClaimsPrincipal(identity);

@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletSICAI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WalletSICAI.Controllers
 {
-
+    
+    [Authorize(Roles = "Administrador")]
     public class DatosEstudiantesController : Controller
     {
         private readonly AuthService _authService;
